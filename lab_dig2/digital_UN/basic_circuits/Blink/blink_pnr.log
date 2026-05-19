@@ -1,0 +1,238 @@
+Info: constraining clock net 'clk' to 25.00 MHz
+
+Info: Logic utilisation before packing:
+Info:     Total LUT4s:        49/24288     0%
+Info:         logic LUTs:     25/24288     0%
+Info:         carry LUTs:     24/24288     0%
+Info:           RAM LUTs:      0/ 3036     0%
+Info:          RAMW LUTs:      0/ 6072     0%
+
+Info:      Total DFFs:        24/24288     0%
+
+Info: Packing IOs..
+Info: pin 'rst$tr_io' constrained to Bel 'X6/Y50/PIOA'.
+Info: pin 'clk$tr_io' constrained to Bel 'X0/Y47/PIOC'.
+Info: pin 'LED$tr_io' constrained to Bel 'X4/Y50/PIOA'.
+Info: Packing constants..
+Info: Packing carries...
+Info: Packing LUTs...
+Info: Packing LUT5-7s...
+Info: Packing FFs...
+Info:     4 FFs paired with LUTs.
+Info: Generating derived timing constraints...
+Info: Promoting globals...
+Info:     promoting clock net clk$TRELLIS_IO_IN to global network
+Info: Checksum: 0x0594eefd
+
+Info: Device utilisation:
+Info: 	          TRELLIS_IO:     3/  197     1%
+Info: 	                DCCA:     1/   56     1%
+Info: 	              DP16KD:     0/   56     0%
+Info: 	          MULT18X18D:     0/   28     0%
+Info: 	              ALU54B:     0/   14     0%
+Info: 	             EHXPLLL:     0/    2     0%
+Info: 	             EXTREFB:     0/    1     0%
+Info: 	                DCUA:     0/    1     0%
+Info: 	           PCSCLKDIV:     0/    2     0%
+Info: 	             IOLOGIC:     0/  128     0%
+Info: 	            SIOLOGIC:     0/   69     0%
+Info: 	                 GSR:     0/    1     0%
+Info: 	               JTAGG:     0/    1     0%
+Info: 	                OSCG:     0/    1     0%
+Info: 	               SEDGA:     0/    1     0%
+Info: 	                 DTR:     0/    1     0%
+Info: 	             USRMCLK:     0/    1     0%
+Info: 	             CLKDIVF:     0/    4     0%
+Info: 	           ECLKSYNCB:     0/   10     0%
+Info: 	             DLLDELD:     0/    8     0%
+Info: 	              DDRDLL:     0/    4     0%
+Info: 	             DQSBUFM:     0/    8     0%
+Info: 	     TRELLIS_ECLKBUF:     0/    8     0%
+Info: 	        ECLKBRIDGECS:     0/    2     0%
+Info: 	                DCSC:     0/    2     0%
+Info: 	          TRELLIS_FF:    24/24288     0%
+Info: 	        TRELLIS_COMB:    55/24288     0%
+Info: 	        TRELLIS_RAMW:     0/ 3036     0%
+
+Info: Placed 3 cells based on constraints.
+Info: Creating initial analytic placement for 47 cells, random placement wirelen = 2727.
+Info:     at initial placer iter 0, wirelen = 75
+Info:     at initial placer iter 1, wirelen = 54
+Info:     at initial placer iter 2, wirelen = 69
+Info:     at initial placer iter 3, wirelen = 55
+Info: Running main analytical placer, max placement attempts per cell = 10000.
+Info:     at iteration #1, type ALL: wirelen solved = 51, spread = 149, legal = 215; time = 0.01s
+Info:     at iteration #2, type ALL: wirelen solved = 39, spread = 151, legal = 207; time = 0.00s
+Info:     at iteration #3, type ALL: wirelen solved = 41, spread = 104, legal = 192; time = 0.00s
+Info:     at iteration #4, type ALL: wirelen solved = 48, spread = 100, legal = 202; time = 0.00s
+Info:     at iteration #5, type ALL: wirelen solved = 60, spread = 163, legal = 214; time = 0.00s
+Info:     at iteration #6, type ALL: wirelen solved = 49, spread = 106, legal = 192; time = 0.00s
+Info:     at iteration #7, type ALL: wirelen solved = 66, spread = 110, legal = 200; time = 0.00s
+Info:     at iteration #8, type ALL: wirelen solved = 60, spread = 110, legal = 208; time = 0.00s
+Info: HeAP Placer Time: 0.04s
+Info:   of which solving equations: 0.01s
+Info:   of which spreading cells: 0.01s
+Info:   of which strict legalisation: 0.00s
+
+Info: Running simulated annealing placer for refinement.
+Info:   at iteration #1: temp = 0.000000, timing cost = 17, wirelen = 192
+Info:   at iteration #5: temp = 0.000000, timing cost = 15, wirelen = 136
+Info:   at iteration #10: temp = 0.000000, timing cost = 14, wirelen = 129
+Info:   at iteration #12: temp = 0.000000, timing cost = 14, wirelen = 129 
+Info: SA placement time 0.01s
+
+Info: Max frequency for clock '$glbnet$clk$TRELLIS_IO_IN': 249.94 MHz (PASS at 25.00 MHz)
+
+Info: Max delay <async>                           -> posedge $glbnet$clk$TRELLIS_IO_IN: 3.54 ns
+Info: Max delay posedge $glbnet$clk$TRELLIS_IO_IN -> <async>                          : 2.92 ns
+
+Info: Checksum: 0xba233bad
+Info: Routing globals...
+Info:     routing clock net $glbnet$clk$TRELLIS_IO_IN using global 0
+
+Info: Routing..
+Info: Setting up routing queue.
+Info: Routing 127 arcs.
+Info:            |   (re-)routed arcs  |   delta    | remaining|       time spent     |
+Info:    IterCnt |  w/ripup   wo/ripup |  w/r  wo/r |      arcs| batch(sec) total(sec)|
+Info:        127 |        0        113 |    0   113 |         0|       0.02       0.02|
+Info: Routing complete.
+Info: Router1 time 0.02s
+Info: Checksum: 0xcdd48d9f
+
+Info: Critical path report for clock '$glbnet$clk$TRELLIS_IO_IN' (posedge -> posedge):
+Info: curr total
+Info:  0.5  0.5  Source counter_TRELLIS_FF_Q_22.Q
+Info:  1.1  1.7    Net counter[1] (3,46) -> (4,45)
+Info:                Sink counter_CCU2C_B0_11$CCU2_COMB1.B
+Info:                Defined in:
+Info:                  blink.v:6.13-6.20
+Info:  0.4  2.1  Source counter_CCU2C_B0_11$CCU2_COMB1.FCO
+Info:  0.0  2.1    Net counter_CCU2C_B0_COUT[2] (4,45) -> (4,45)
+Info:                Sink counter_CCU2C_B0_3$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  blink.v:15.18-15.29
+Info:                  /home/andresmorales/miniconda3/envs/digital/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
+Info:  0.1  2.2  Source counter_CCU2C_B0_3$CCU2_COMB0.FCO
+Info:  0.0  2.2    Net counter_CCU2C_B0_3$CCU2_FCI_INT (4,45) -> (4,45)
+Info:                Sink counter_CCU2C_B0_3$CCU2_COMB1.FCI
+Info:  0.0  2.2  Source counter_CCU2C_B0_3$CCU2_COMB1.FCO
+Info:  0.0  2.2    Net counter_CCU2C_B0_COUT[4] (4,45) -> (4,45)
+Info:                Sink counter_CCU2C_B0_2$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  blink.v:15.18-15.29
+Info:                  /home/andresmorales/miniconda3/envs/digital/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
+Info:  0.1  2.3  Source counter_CCU2C_B0_2$CCU2_COMB0.FCO
+Info:  0.0  2.3    Net counter_CCU2C_B0_2$CCU2_FCI_INT (4,45) -> (4,45)
+Info:                Sink counter_CCU2C_B0_2$CCU2_COMB1.FCI
+Info:  0.0  2.3  Source counter_CCU2C_B0_2$CCU2_COMB1.FCO
+Info:  0.0  2.3    Net counter_CCU2C_B0_COUT[6] (4,45) -> (5,45)
+Info:                Sink counter_CCU2C_B0_1$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  blink.v:15.18-15.29
+Info:                  /home/andresmorales/miniconda3/envs/digital/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
+Info:  0.1  2.3  Source counter_CCU2C_B0_1$CCU2_COMB0.FCO
+Info:  0.0  2.3    Net counter_CCU2C_B0_1$CCU2_FCI_INT (5,45) -> (5,45)
+Info:                Sink counter_CCU2C_B0_1$CCU2_COMB1.FCI
+Info:  0.0  2.3  Source counter_CCU2C_B0_1$CCU2_COMB1.FCO
+Info:  0.0  2.3    Net counter_CCU2C_B0_COUT[8] (5,45) -> (5,45)
+Info:                Sink counter_CCU2C_B0$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  blink.v:15.18-15.29
+Info:                  /home/andresmorales/miniconda3/envs/digital/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
+Info:  0.1  2.4  Source counter_CCU2C_B0$CCU2_COMB0.FCO
+Info:  0.0  2.4    Net counter_CCU2C_B0$CCU2_FCI_INT (5,45) -> (5,45)
+Info:                Sink counter_CCU2C_B0$CCU2_COMB1.FCI
+Info:  0.0  2.4  Source counter_CCU2C_B0$CCU2_COMB1.FCO
+Info:  0.0  2.4    Net counter_CCU2C_B0_COUT[10] (5,45) -> (5,45)
+Info:                Sink counter_CCU2C_B0_10$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  blink.v:15.18-15.29
+Info:                  /home/andresmorales/miniconda3/envs/digital/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
+Info:  0.1  2.5  Source counter_CCU2C_B0_10$CCU2_COMB0.FCO
+Info:  0.0  2.5    Net counter_CCU2C_B0_10$CCU2_FCI_INT (5,45) -> (5,45)
+Info:                Sink counter_CCU2C_B0_10$CCU2_COMB1.FCI
+Info:  0.0  2.5  Source counter_CCU2C_B0_10$CCU2_COMB1.FCO
+Info:  0.0  2.5    Net counter_CCU2C_B0_COUT[12] (5,45) -> (5,45)
+Info:                Sink counter_CCU2C_B0_9$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  blink.v:15.18-15.29
+Info:                  /home/andresmorales/miniconda3/envs/digital/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
+Info:  0.1  2.5  Source counter_CCU2C_B0_9$CCU2_COMB0.FCO
+Info:  0.0  2.5    Net counter_CCU2C_B0_9$CCU2_FCI_INT (5,45) -> (5,45)
+Info:                Sink counter_CCU2C_B0_9$CCU2_COMB1.FCI
+Info:  0.0  2.5  Source counter_CCU2C_B0_9$CCU2_COMB1.FCO
+Info:  0.0  2.5    Net counter_CCU2C_B0_COUT[14] (5,45) -> (6,45)
+Info:                Sink counter_CCU2C_B0_8$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  blink.v:15.18-15.29
+Info:                  /home/andresmorales/miniconda3/envs/digital/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
+Info:  0.1  2.6  Source counter_CCU2C_B0_8$CCU2_COMB0.FCO
+Info:  0.0  2.6    Net counter_CCU2C_B0_8$CCU2_FCI_INT (6,45) -> (6,45)
+Info:                Sink counter_CCU2C_B0_8$CCU2_COMB1.FCI
+Info:  0.0  2.6  Source counter_CCU2C_B0_8$CCU2_COMB1.FCO
+Info:  0.0  2.6    Net counter_CCU2C_B0_COUT[16] (6,45) -> (6,45)
+Info:                Sink counter_CCU2C_B0_7$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  blink.v:15.18-15.29
+Info:                  /home/andresmorales/miniconda3/envs/digital/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
+Info:  0.1  2.7  Source counter_CCU2C_B0_7$CCU2_COMB0.FCO
+Info:  0.0  2.7    Net counter_CCU2C_B0_7$CCU2_FCI_INT (6,45) -> (6,45)
+Info:                Sink counter_CCU2C_B0_7$CCU2_COMB1.FCI
+Info:  0.0  2.7  Source counter_CCU2C_B0_7$CCU2_COMB1.FCO
+Info:  0.0  2.7    Net counter_CCU2C_B0_COUT[18] (6,45) -> (6,45)
+Info:                Sink counter_CCU2C_B0_6$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  blink.v:15.18-15.29
+Info:                  /home/andresmorales/miniconda3/envs/digital/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
+Info:  0.1  2.8  Source counter_CCU2C_B0_6$CCU2_COMB0.FCO
+Info:  0.0  2.8    Net counter_CCU2C_B0_6$CCU2_FCI_INT (6,45) -> (6,45)
+Info:                Sink counter_CCU2C_B0_6$CCU2_COMB1.FCI
+Info:  0.0  2.8  Source counter_CCU2C_B0_6$CCU2_COMB1.FCO
+Info:  0.0  2.8    Net counter_CCU2C_B0_COUT[20] (6,45) -> (6,45)
+Info:                Sink counter_CCU2C_B0_5$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  blink.v:15.18-15.29
+Info:                  /home/andresmorales/miniconda3/envs/digital/bin/../share/yosys/ecp5/arith_map.v:63.22-63.23
+Info:  0.4  3.2  Source counter_CCU2C_B0_5$CCU2_COMB0.F
+Info:  0.9  4.1    Net counter_TRELLIS_FF_Q_DI[20] (6,45) -> (6,48)
+Info:                Sink counter_TRELLIS_FF_Q_3.M
+Info:                Defined in:
+Info:                  blink.v:15.18-15.29
+Info:                  /home/andresmorales/miniconda3/envs/digital/bin/../share/yosys/ecp5/arith_map.v:34.26-34.27
+Info:  0.0  4.1  Setup counter_TRELLIS_FF_Q_3.M
+Info: 2.1 ns logic, 2.1 ns routing
+
+Info: Critical path report for cross-domain path '<async>' -> 'posedge $glbnet$clk$TRELLIS_IO_IN':
+Info: curr total
+Info:  0.0  0.0  Source rst$tr_io.O
+Info:  1.6  1.6    Net rst$TRELLIS_IO_IN (6,50) -> (4,44)
+Info:                Sink counter_TRELLIS_FF_Q_19_LSR_LUT4_Z.D
+Info:                Defined in:
+Info:                  blink.v:3.12-3.15
+Info:  0.2  1.9  Source counter_TRELLIS_FF_Q_19_LSR_LUT4_Z.F
+Info:  0.3  2.2    Net counter_TRELLIS_FF_Q_19_LSR (4,44) -> (4,44)
+Info:                Sink counter_TRELLIS_FF_Q_19.LSR
+Info:  0.4  2.6  Setup counter_TRELLIS_FF_Q_19.LSR
+Info: 0.7 ns logic, 2.0 ns routing
+
+Info: Critical path report for cross-domain path 'posedge $glbnet$clk$TRELLIS_IO_IN' -> '<async>':
+Info: curr total
+Info:  0.5  0.5  Source counter_TRELLIS_FF_Q.Q
+Info:  0.7  1.2    Net counter[23] (7,47) -> (4,47)
+Info:                Sink LED_LUT4_Z.D
+Info:                Defined in:
+Info:                  blink.v:6.13-6.20
+Info:  0.2  1.5  Source LED_LUT4_Z.F
+Info:  0.9  2.4    Net LED$TRELLIS_IO_OUT (4,47) -> (4,50)
+Info:                Sink LED$tr_io.I
+Info:                Defined in:
+Info:                  blink.v:4.12-4.15
+Info: 0.8 ns logic, 1.6 ns routing
+
+Info: Max frequency for clock '$glbnet$clk$TRELLIS_IO_IN': 241.72 MHz (PASS at 25.00 MHz)
+
+Info: Max delay <async>                           -> posedge $glbnet$clk$TRELLIS_IO_IN: 2.62 ns
+Info: Max delay posedge $glbnet$clk$TRELLIS_IO_IN -> <async>                          : 2.40 ns
+
+Info: Program finished normally.

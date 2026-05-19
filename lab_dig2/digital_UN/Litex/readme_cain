@@ -1,0 +1,222 @@
+sudo openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD -m
+sudo openFPGALoader -b colorlight-i5 -m
+./icebreaker.py --cpu-type femtorv  --cpu-variant gracilis --build
+
+
+0. Carcasa para imprimir se encuentra en: ecb_T8_T113/PCB/ECB_T8_T113_V0.2
+   case.scad       Openscad se incluye la placa para verificar las medidas
+   case_print.scad Openscad versión para imprimir
+   case_print.stl  Archivo para impresora
+
+
+*************************************
+**********  FPGA         ************
+*************************************
+
+
+1. Instalar Herramientas de desarrollo de FPGAs:
+https://github.com/unal-digital-electronic/litex-and-softcore-projects/tree/master/synthesis-compilation-and-programming-tools/CONDA-ice40-ecp5-cross-compilers
+
+
+2. Instalar Litex !!!!! Se debe hacer desde CONDA !!!!
+conda activate fpga
+https://github.com/enjoy-digital/litex
+
+3. Instalar las herramientas de Efinix (Debe registrarse):
+https://www.efinixinc.com/support/index.php     
+
+
+https://www.efinixinc.com/products-efinity.html
+export LITEX_ENV_EFINITY=/home/carlos/Embedded/efinity/2023.2/
+
+
+Probar la FPGA:
+ cd ecb_T8_T113/Examples/Litex
+Ejecutar:
+conda activate fpga
+
+./base.py --with-ethernet --eth-ip 10.42.0.220 --build
+./base.py --with-ethernet --eth-ip 10.42.0.220 --flash
+
+
+*************************************
+**********  PROCESADOR   ************
+*************************************
+
+1. Seguir las instrucciones para compilar buildroot y la imágen del kernel:
+
+https://github.com/YuzukiHD/Buildroot-YuzukiSBC/tree/master/docs
+
+
+2. Ahora se debe cambiar el DTS para adaptarlo a la tarjeta para esto:
+
+copy ecb_T8_T113/Develop/Linux/src/dts_files/ to:
+sun8iw20p1-linux.dtsi./board/allwinner-generic/sun8i-t113/dts/linux/sun8iw20p1-linux.dtsi
+sun8i-mangopi-mq-dual-linux.dts ./board/mangopi/mq-dual/dts/linux/sun8i-mangopi-mq-dual-linux.dts
+
+3. Hacer cambios en la configuración de Linux:
+
+make linux-menuconfig
+Device Drivers
+  GPIO Support  --->
+    <*> /sys/class/gpio/
+    <*> Debug GPIO calls
+
+Device Drivers
+ Ethernet driver support  --->
+    < >   RealTek RTL-8363NB Ethernet Adapter support
+
+make linux-rebuild
+make
+
+cd output/images
+sudo dd if=sdcard.img of=/dev/sdX   (En el device que asigne el kernel)
+
+*************************
+**** DEBIAN IMAGE *******
+*************************
+mkdir -p build/debian
+cd build/debian
+# (re-)generate only if rootfs doesn't exist or runme script has changed
+# bootstrap a first-stage rootfs
+sudo rm -rf stage1
+fakeroot debootstrap --variant=minbase \
+	--arch=armhf --components=main,contrib,non-free \
+	--foreign \
+	--include=apt-transport-https,busybox,ca-certificates,can-utils,command-not-found,chrony,curl,e2fsprogs,ethtool,fdisk,gpiod,haveged,i2c-tools,ifupdown,iputils-ping,isc-dhcp-client,initramfs-tools,libiio-utils,lm-sensors,locales,nano,net-tools,wpasupplicant,ntpdate,openssh-server,psmisc,rfkill,sudo,systemd-sysv,tftp,tftp-hpa,tio,usbutils,wget,xterm,xz-utils,vim,fim \
+	bookworm \
+	stage1 \
+	https://deb.debian.org/debian
+
+# prepare init-script for second stage inside VM
+touch stage1/stage2.sh
+
+#!/bin/sh
+
+sudo chroot stage1
+
+# run second-stage bootstrap
+/debootstrap/debootstrap --second-stage
+
+# mount pseudo-filesystems
+mount -vt proc proc /proc
+mount -vt sysfs sysfs /sys
+
+# configure dns
+cat /proc/net/pnp > /etc/resolv.conf
+
+# set empty root password
+passwd -d root
+
+# update command-not-found db
+vi /etc/apt/sources.list
+# change to:
+deb https://deb.debian.org/debian bookworm main contrib non-free-firmware
+apt-file update
+update-command-not-found
+
+# enable optional system services
+# none yet ...
+
+# populate fstab
+printf "/dev/root / ext4 defaults 0 1\\n" > /etc/fstab
+
+# delete self
+rm -f /stage2.sh
+
+# flush disk
+sync
+
+# umount pseudo-filesystems
+umount /proc/
+umount /sys
+
+# power-off
+exit
+
+# you must copy Linux drivers to stage1
+cp -avr /Path_to_buildroot_dir/buildroot/output/target/lib/modules/ lib/
+
+
+
+********************************************
+mount -wo remount rootfs /
+*******************************************
+# modify /etc/network/interfaces
+    auto eth0
+    iface eth0 inet static
+        address 10.42.0.220
+        netmask 255.255.255.0
+        gateway 10.42.0.1
+
+
+Configurar ssh por la interfaz eth0
+
+
+
+Una vez se cuenta con la conexión WiFi, se debe configurar el protocolo ssh para permitir el paso de información desde y hacia la placa ECB, 
+para esto primero debemos generar una llave de autenticación para ssh, esto se hace ejecutando el comando 
+
+ssh-keygen -t rsa -b 3072 
+
+como resultado se creará el archivo /home/user/.ssh/id_rsa, 
+
+cuyo contenido se debe copiar en el archivo: .ssh/authorized_keys
+
+
+Adicionalmente se debe crear un archivo de configuración (.ssh/config)en el host (x86) con el siguiente contenido (la dirección IP puede variar si no se aplica una regla de configuración al router):
+
+\begin{verbatim}
+ Host 10.42.0.220
+HostName 10.42.0.220
+User root
+Port 22
+IdentityFile ~/.ssh/id_rsa
+HostKeyAlgorithms +ssh-rsa
+PubkeyAcceptedKeyTypes +ssh-rsa
+\end{verbatim}
+
+En Debian:
+\begin{verbatim}
+/etc/ssh/sshd_config 
+PasswordAuthentication yes
+ChallengeResponseAuthentication no
+
+/etc/ssh/sshd_config:
+PermitRootLogin yes
+PubkeyAuthentication no
+
+*****************************************************
+**********  RESET BOARD WITH FTDI *******************
+*****************************************************
+
+________________________________
+Building and Installing libftdi1
+________________________________
+
+
+libftdi source code is cloned in Examples directory, so to build and Install libftdi:
+cd libftdi
+mkdir build
+cd build
+cmake ..
+make 
+sudo make install
+
+_________________________________________________
+Compiling programm to reset FPGA from FTDI device
+_________________________________________________
+reset_fpga.c 
+
+gcc reset_fpga.c -L/usr/lib/x86_64-linux-gnu/ -lftdi1 -o reset_fpga
+
+
+sudo tcpdump -ni any udp port 69 and host 192.168.1.50 -i enx00e04c360769
+
+
+
+
+_________________________________________________
+colorlight 5A network
+_________________________________________________
+./colorlight_5a_75x.py  --build --uart-name=serial --use-internal-osc  --with-ethernet

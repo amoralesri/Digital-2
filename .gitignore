@@ -1,0 +1,8 @@
+.tmpdir_path
+lab_dig2/LTspice64.msi
+*.vcd
+*.vvp
+*.o
+a.out
+simv_*
+build/

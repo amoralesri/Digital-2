@@ -1,0 +1,73 @@
+
+firmware.elf:     file format elf32-littleriscv
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 everything    000000c2  00000000  00000000  00000054  2**2
+                  CONTENTS, ALLOC, LOAD, CODE
+
+Disassembly of section everything:
+
+00000000 <loopM>:
+   0:	00002137          	lui	sp,0x2
+   4:	00500513          	li	a0,5
+   8:	00400593          	li	a1,4
+   c:	06c000ef          	jal	ra,78 <mult_hw>
+  10:	ff1ff06f          	j	0 <loopM>
+  14:	1941                	addi	s2,s2,-16
+  16:	0000                	unimp
+  18:	7200                	flw	fs0,32(a2)
+  1a:	7369                	lui	t1,0xffffa
+  1c:	01007663          	bgeu	zero,a6,28 <MULT_DONE+0x14>
+  20:	0000000f          	fence	unknown,unknown
+  24:	7205                	lui	tp,0xfffe1
+  26:	3376                	fld	ft6,376(sp)
+  28:	6932                	flw	fs2,12(sp)
+  2a:	7032                	flw	ft0,44(sp)
+  2c:	0030                	addi	a2,sp,8
+	...
+
+00000030 <mult>:
+  30:	ff410113          	addi	sp,sp,-12 # 1ff4 <mult_hw+0x1f7c>
+  34:	00d12023          	sw	a3,0(sp)
+  38:	00e12223          	sw	a4,4(sp)
+  3c:	00f12423          	sw	a5,8(sp)
+  40:	00050733          	add	a4,a0,zero
+  44:	000587b3          	add	a5,a1,zero
+  48:	00000513          	li	a0,0
+  4c:	0017f693          	andi	a3,a5,1
+  50:	00068463          	beqz	a3,58 <mult+0x28>
+  54:	00e50533          	add	a0,a0,a4
+  58:	0017d793          	srli	a5,a5,0x1
+  5c:	00171713          	slli	a4,a4,0x1
+  60:	fe0796e3          	bnez	a5,4c <mult+0x1c>
+  64:	00012683          	lw	a3,0(sp)
+  68:	00412703          	lw	a4,4(sp)
+  6c:	00812783          	lw	a5,8(sp)
+  70:	00c10113          	addi	sp,sp,12
+  74:	00008067          	ret
+
+00000078 <mult_hw>:
+  78:	004201b7          	lui	gp,0x420
+  7c:	00a1a223          	sw	a0,4(gp) # 420004 <MULT_BASE+0x4>
+  80:	00b1a423          	sw	a1,8(gp)
+  84:	00100513          	li	a0,1
+  88:	00a1a623          	sw	a0,12(gp)
+  8c:	0001a623          	sw	zero,12(gp)
+  90:	00100293          	li	t0,1
+  94:	0141a303          	lw	t1,20(gp)
+  98:	00537333          	and	t1,t1,t0
+  9c:	fe030ae3          	beqz	t1,90 <mult_hw+0x18>
+  a0:	0101a503          	lw	a0,16(gp)
+  a4:	00008067          	ret
+  a8:	1941                	addi	s2,s2,-16
+  aa:	0000                	unimp
+  ac:	7200                	flw	fs0,32(a2)
+  ae:	7369                	lui	t1,0xffffa
+  b0:	01007663          	bgeu	zero,a6,bc <mult_hw+0x44>
+  b4:	0000000f          	fence	unknown,unknown
+  b8:	7205                	lui	tp,0xfffe1
+  ba:	3376                	fld	ft6,376(sp)
+  bc:	6932                	flw	fs2,12(sp)
+  be:	7032                	flw	ft0,44(sp)
+  c0:	0030                	addi	a2,sp,8

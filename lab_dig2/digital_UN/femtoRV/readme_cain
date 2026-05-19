@@ -1,0 +1,3 @@
+https://www.digikey.com/en/maker/projects/introduction-to-fpga-part-12-risc-v-custom-peripheral/148dba8ecafe49a1ac7e13641088af4c
+python3 -m litex_boards.targets.radiona_ulx3s --cpu-type=femtorv --build --load
+/Work/Embedded/toolchain/

@@ -1,0 +1,41 @@
+Dividend op_A = 0xC86C (51308)
+Divisor  op_B = 0x00CA (202)
+
+iter state          count A[31:16] A[15:0] A_minus_B bit_q
+---- -------------- ----- -------- -------- --------- -----
+   1 SHIFT             15 0x0001   0x90D8   0xFF37    -
+   1 CHECK_GREATER    15 0x0001   0x90D8   0xFF37    0
+   2 SHIFT             14 0x0003   0x21B0   0xFF39    -
+   2 CHECK_GREATER    14 0x0003   0x21B0   0xFF39    0
+   3 SHIFT             13 0x0006   0x4360   0xFF3C    -
+   3 CHECK_GREATER    13 0x0006   0x4360   0xFF3C    0
+   4 SHIFT             12 0x000C   0x86C0   0xFF42    -
+   4 CHECK_GREATER    12 0x000C   0x86C0   0xFF42    0
+   5 SHIFT             11 0x0019   0x0D80   0xFF4F    -
+   5 CHECK_GREATER    11 0x0019   0x0D80   0xFF4F    0
+   6 SHIFT             10 0x0032   0x1B00   0xFF68    -
+   6 CHECK_GREATER    10 0x0032   0x1B00   0xFF68    0
+   7 SHIFT              9 0x0064   0x3600   0xFF9A    -
+   7 CHECK_GREATER     9 0x0064   0x3600   0xFF9A    0
+   8 SHIFT              8 0x00C8   0x6C00   0xFFFE    -
+   8 CHECK_GREATER     8 0x00C8   0x6C00   0xFFFE    0
+   9 SHIFT              7 0x0190   0xD800   0x00C6    -
+   9 CHECK_GREATER     7 0x00C6   0xD801   0x00C6    1
+  10 SHIFT              6 0x018D   0xB002   0x00C3    -
+  10 CHECK_GREATER     6 0x00C3   0xB003   0x00C3    1
+  11 SHIFT              5 0x0187   0x6006   0x00BD    -
+  11 CHECK_GREATER     5 0x00BD   0x6007   0x00BD    1
+  12 SHIFT              4 0x017A   0xC00E   0x00B0    -
+  12 CHECK_GREATER     4 0x00B0   0xC00F   0x00B0    1
+  13 SHIFT              3 0x0161   0x801E   0x0097    -
+  13 CHECK_GREATER     3 0x0097   0x801F   0x0097    1
+  14 SHIFT              2 0x012F   0x003E   0x0065    -
+  14 CHECK_GREATER     2 0x0065   0x003F   0x0065    1
+  15 SHIFT              1 0x00CA   0x007E   0x0000    -
+  15 CHECK_GREATER     1 0x0000   0x007F   0x0000    1
+  16 SHIFT              0 0x0000   0x00FE   0xFF36    -
+  16 CHECK_GREATER     0 0x0000   0x00FE   0xFF36    0
+
+Quotient  = 0x00FE (254)
+Remainder = 0x0000 (0)
+Check     = 202 * 254 + 0 = 51308

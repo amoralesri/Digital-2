@@ -1,0 +1,1 @@
+sudo openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD -m build/colorlight_5a_75e/gateware/colorlight_5a_75e.bit

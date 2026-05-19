@@ -1,0 +1,53 @@
+
+start.o:     file format elf32-littleriscv
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000000  00000000  00000000  00000034  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00000000  00000000  00000034  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000000  00000000  00000000  00000034  2**0
+                  ALLOC
+  3 .text.startup 00000012  00000000  00000000  00000034  2**0
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  4 .debug_line   00000058  00000000  00000000  00000046  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING, OCTETS
+  5 .debug_line_str 00000035  00000000  00000000  0000009e  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+  6 .debug_info   00000024  00000000  00000000  000000d3  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING, OCTETS
+  7 .debug_abbrev 00000014  00000000  00000000  000000f7  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+  8 .debug_aranges 00000020  00000000  00000000  00000110  2**3
+                  CONTENTS, RELOC, READONLY, DEBUGGING, OCTETS
+  9 .debug_str    00000043  00000000  00000000  00000130  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 10 .riscv.attributes 00000046  00000000  00000000  00000173  2**0
+                  CONTENTS, READONLY
+
+Disassembly of section .text.startup:
+
+00000000 <_start>:
+
+_start:
+    /* 1. CONFIGURAR LA PILA (STACK POINTER) - CRÍTICO */
+    /* Netboot carga el programa en 0x40000000. */
+    /* Ponemos la pila 32KB (0x8000) más adelante para tener espacio de sobra. */
+    li sp, 0x40008000
+   0:	40008137          	lui	sp,0x40008
+    
+    /* 2. Desactivar interrupciones por seguridad */
+    csrw mie, zero
+   4:	30401073          	csrw	mie,zero
+    
+    /* 3. Saltar a C */
+    call main
+   8:	00000097          	auipc	ra,0x0
+   c:	000080e7          	jalr	ra # 8 <_start+0x8>
+
+00000010 <loop>:
+
+loop:
+    j loop
+  10:	a001                	j	10 <loop>

@@ -1,0 +1,30 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+BRAM             0x0000000000000000 0x0000000000004000 xrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+
+everything      0x0000000000000000       0xc2
+                0x0000000000000000                . = ALIGN (0x4)
+ call_mult.o(.text)
+ .text          0x0000000000000000       0x14 call_mult.o
+ *(.*)
+ .data          0x0000000000000014        0x0 call_mult.o
+ .bss           0x0000000000000014        0x0 call_mult.o
+ .riscv.attributes
+                0x0000000000000014       0x1a call_mult.o
+ *fill*         0x000000000000002e        0x2 
+ .text          0x0000000000000030       0x78 mult.o
+                0x0000000000000030                mult
+                0x0000000000000078                mult_hw
+ .data          0x00000000000000a8        0x0 mult.o
+ .bss           0x00000000000000a8        0x0 mult.o
+ .riscv.attributes
+                0x00000000000000a8       0x1a mult.o
+LOAD call_mult.o
+LOAD mult.o
+OUTPUT(firmware.elf elf32-littleriscv)

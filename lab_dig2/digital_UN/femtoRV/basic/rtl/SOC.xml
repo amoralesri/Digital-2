@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<efx:project last_change_date="Date : 2024-09-12 10:27" location="." name="SOC" sw_version="2023.2.307"
+ xmlns:efx="http://www.efinixinc.com/enf_proj">
+  <efx:device_info>
+    <efx:family name="Trion"/>
+    <efx:device name="T20Q144"/>
+    <efx:timing_model name="C3"/>
+  </efx:device_info>
+  <efx:design_info>
+    <efx:design_file library="default" name="SOC.v" version="default"/>
+    <efx:design_file library="default" name="cores/cpu/femtorv32_quark_V2.v" version="default"/>
+    <efx:design_file library="default" name="cores/uart/perip_uart.v" version="default"/>
+    <efx:design_file library="default" name="cores/uart/uart.v" version="default"/>
+    <efx:design_file library="default" name="cores/mult_ASM/perip_mult.v" version="default"/>
+    <efx:design_file library="default" name="cores/mult_ASM/mult_32.v" version="default"/>
+    <efx:design_file library="default" name="cores/mult_ASM/acc.v" version="default"/>
+    <efx:design_file library="default" name="cores/mult_ASM/comp.v" version="default"/>
+    <efx:design_file library="default" name="cores/mult_ASM/lsr_mult.v" version="default"/>
+    <efx:design_file library="default" name="cores/mult_ASM/control_mult.v" version="default"/>
+    <efx:design_file library="default" name="cores/mult_ASM/rsr.v" version="default"/>
+    <efx:design_file library="default" name="cores/div/perip_div.v" version="default"/>
+    <efx:design_file library="default" name="cores/div/div.v" version="default"/>
+    <efx:design_file library="default" name="cores/sqrt_ASM/addc2.v" version="default"/>
+    <efx:design_file library="default" name="cores/sqrt_ASM/count.v" version="default"/>
+    <efx:design_file library="default" name="cores/sqrt_ASM/lsr.v" version="default"/>
+    <efx:design_file library="default" name="cores/sqrt_ASM/perip_sqrt.v" version="default"/>
+    <efx:design_file library="default" name="cores/sqrt_ASM/lsr2.v" version="default"/>
+    <efx:design_file library="default" name="cores/sqrt_ASM/control.v" version="default"/>
+    <efx:design_file library="default" name="cores/sqrt_ASM/sqrt.v" version="default"/>
+    <efx:design_file library="default" name="cores/bin2bcd/add_sub_c2.v" version="default"/>
+    <efx:design_file library="default" name="cores/bin2bcd/bin2bcd.v" version="default"/>
+    <efx:design_file library="default" name="cores/bin2bcd/mux2.v" version="default"/>
+    <efx:design_file library="default" name="cores/bin2bcd/count.v" version="default"/>
+    <efx:design_file library="default" name="cores/bin2bcd/ctrl_b2b.v" version="default"/>
+    <efx:design_file library="default" name="cores/bin2bcd/perip_bin2bcd.v" version="default"/>
+    <efx:design_file library="default" name="cores/bin2bcd/lsr4.v" version="default"/>
+    <efx:design_file library="default" name="cores/bin2bcd/reg_msb.v" version="default"/>
+    <efx:design_file library="default" name="cores/bcd2bin/bcd2bin.v" version="default"/>
+    <efx:design_file library="default" name="cores/bcd2bin/perip_bcd2bin.v" version="default"/>
+    <efx:design_file library="default" name="cores/bcd2bin/rsr4.v" version="default"/>
+    <efx:design_file library="default" name="cores/bram/bram.v" version="default"/>
+  </efx:design_info>
+  <efx:constraint_info>
+    <efx:sdc_file name="SOC.sdc"/>
+  </efx:constraint_info>
+  <efx:misc_info/>
+  <efx:ip_info/>
+</efx:project>
+
+
+
+
+

@@ -1,0 +1,2 @@
+./primer_20k.py --cpu-type femtorv  --cpu-variant quark --build --load
+
