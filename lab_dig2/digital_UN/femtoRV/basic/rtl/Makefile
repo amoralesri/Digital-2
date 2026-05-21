@@ -80,6 +80,9 @@ SIM_OBJS   = cores/sim_spi_flash/spiflash.v
 
 
 BUILD_DIR = build
+WS2812_TOP = ws2812_demo_top
+WS2812_OBJS = ws2812_controller.sv ws2812_demo_top.sv
+JTAG_FREQ = 1000000
 
 all: sim_quark
 
@@ -147,10 +150,23 @@ $(TARGET).json: $(OBJS)
 $(TARGET).bit: $(TARGET)_out.config
 	ecppack --bootaddr 0 --compress $(BUILD_DIR)/$< --svf $(BUILD_DIR)/${TARGET}.svf --bit $(BUILD_DIR)/$@
 
-configure_lattice: ${TARGET}.bit   # TDI:TDO:TCK:TMS TXD:CTS:DTR:RXD
+configure_lattice: ${TARGET}.bit   #TDI:TDO:TCK:TMS TXD:CTS:DTR:RXD
 #	sudo openFPGALoader -c ft232RL --pins=0:3:4:1 -m $(BUILD_DIR)/${TARGET}.bit 	
 #	sudo openFPGALoader -c ft232RL --pins=RXD:RTS:TXD:CTS -m $(BUILD_DIR)/${TARGET}.bit 	
 	sudo openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD -m $(BUILD_DIR)/${TARGET}.bit	
+
+$(WS2812_TOP).json: $(WS2812_OBJS)
+	mkdir -p $(BUILD_DIR)
+	yosys -v3 -l $(BUILD_DIR)/$(WS2812_TOP).rpt -p 'read_verilog -sv -DSYNTHESIS -DWS2812_DEMO_INIT $(WS2812_OBJS); synth_ecp5 -top $(WS2812_TOP); write_json $(BUILD_DIR)/$@'
+
+$(WS2812_TOP)_out.config: $(WS2812_TOP).json ws2812_demo_top.lpf
+	nextpnr-ecp5 --json $(BUILD_DIR)/$< --lpf ws2812_demo_top.lpf --textcfg $(BUILD_DIR)/$@ --25k --package CABGA256 --speed 6 --timing-allow-fail --seed 1 --log $(BUILD_DIR)/$(WS2812_TOP)_pnr.log
+
+$(WS2812_TOP).bit: $(WS2812_TOP)_out.config
+	ecppack --bootaddr 0 $(BUILD_DIR)/$< --svf $(BUILD_DIR)/$(WS2812_TOP).svf --bit $(BUILD_DIR)/$@
+
+configure_ws2812: $(WS2812_TOP).bit
+	sudo openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD --freq $(JTAG_FREQ) -m $(BUILD_DIR)/$(WS2812_TOP).bit
 ########################
 #  LATTICE COLORLIGHT I5
 ########################
