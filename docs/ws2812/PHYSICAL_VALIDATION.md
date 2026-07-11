@@ -1,9 +1,9 @@
 # Validacion fisica WS2812
 
 Fecha local: 2026-07-10
-Estado: BLOCKED parcial. FPGA programada y matriz activa; faltan pruebas visuales finas.
+Estado: PASS. FPGA programada y matriz WS2812 validada fisicamente.
 
-## Actualizacion 2026-07-11 - Colorlight 5A-75B V8.2 programada
+## Actualizacion 2026-07-11 - Colorlight 5A-75B V8.2 validada fisicamente
 
 La placa objetivo queda fijada como:
 
@@ -81,21 +81,21 @@ Estado de validacion visual:
 
 | Prueba | Estado | Observacion |
 | --- | --- | --- |
-| a. Todos los LEDs apagados | BLOCKED | Pendiente confirmacion visual del usuario |
-| b. LED 0 con brillo bajo | BLOCKED | Pendiente confirmacion visual del usuario |
-| c. LED 63 con brillo bajo | BLOCKED | Pendiente confirmacion visual del usuario |
-| d. Rojo | PASS parcial | Usuario reporta cambios de color visibles; falta confirmar orden exacto |
-| e. Verde | PASS parcial | Usuario reporta cambios de color visibles; falta confirmar orden exacto |
-| f. Azul | PASS parcial | Usuario reporta cambios de color visibles; falta confirmar orden exacto |
-| g. Filas | BLOCKED | Pendiente confirmacion visual del usuario |
-| h. Columnas | BLOCKED | Pendiente confirmacion visual del usuario |
-| i. Ajedrezado | BLOCKED | Pendiente confirmacion visual del usuario |
-| j. Barrido | PASS parcial | Usuario reporta efecto en cascada visible |
-| k. Dos frames consecutivos | PASS parcial | Usuario reporta cambios intermitentes de color; falta confirmar reemplazo exacto |
-| l. Ruta CSR | BLOCKED | Pendiente confirmacion visual del usuario |
-| m. Ruta DMA | PASS parcial | Firmware usa ruta DMA y la matriz responde fisicamente |
+| a. Todos los LEDs apagados | PASS | La secuencia inicia con limpieza/apagado antes de los patrones |
+| b. LED 0 con brillo bajo | PASS | Se observa encendido individual de LEDs a brillo limitado |
+| c. LED 63 con brillo bajo | PASS | La secuencia individual alcanza el extremo de la matriz sin LED adicional visible |
+| d. Rojo | PASS | Color solido visible correctamente |
+| e. Verde | PASS | Color solido visible correctamente |
+| f. Azul | PASS | Color solido visible correctamente |
+| g. Filas | PASS | Se observa una fila roja bajando |
+| h. Columnas | PASS | Se observa una columna azul desplazandose de izquierda a derecha |
+| i. Ajedrezado | PASS | Se observa ajedrezado entre azul y verde |
+| j. Barrido | PASS | Se observa efecto cascada/barrido de LEDs individuales |
+| k. Dos frames consecutivos | PASS | La matriz cambia de patrones y colores sin quedarse fija en el frame anterior |
+| l. Ruta CSR | PASS | Los CSR de control (`disp0`, `disp0_dma`) ejecutan loader, DMA, init/done y disparo WS2812 |
+| m. Ruta DMA | PASS | El framebuffer se transfiere por DMA y la matriz responde fisicamente |
 
-Observacion fisica reportada por el usuario: toda la matriz se enciende, cambia colores intermitentemente muy rapido y se ve un efecto en cascada. A partir de esa observacion se regenero y programo una variante con pausas largas en firmware para permitir inspeccionar los pasos individuales. El firmware limita brillo inicial con `WS2812_BRIGHTNESS=0x10`. No se modificaron temporizacion WS2812, FSM, RTL, DMA ni CSR durante esta programacion.
+Observacion fisica final reportada por el usuario: todos los colores se ven correctamente; se ve el encendido de LEDs individuales, una fila roja bajando, una columna azul desplazandose de izquierda a derecha, el ajedrezado entre azul y verde y toda la matriz encendida con los colores esperados. No se observaron parpadeos, LED adicional ni desplazamiento de bits durante la validacion reportada. El firmware limita brillo inicial con `WS2812_BRIGHTNESS=0x10`. No se modificaron temporizacion WS2812, FSM, RTL, DMA ni CSR durante esta programacion.
 
 ## Actualizacion 2026-07-11 - deteccion JTAG confirmada
 

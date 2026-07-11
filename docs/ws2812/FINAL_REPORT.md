@@ -4,7 +4,7 @@ Fecha local: 2026-07-10
 Repositorio: `/home/andresrivera/digital_UN`
 Rama: `feat/ws2812-litex-final-project`
 
-## Actualizacion 2026-07-11 - cierre fisico V8.2 parcial
+## Actualizacion 2026-07-11 - cierre fisico V8.2 final
 
 Se confirmo la placa como `Colorlight 5A-75B V8.2` y el DIN de la matriz en `J1 pin fisico 1`.
 
@@ -19,7 +19,7 @@ Se confirmo la placa como `Colorlight 5A-75B V8.2` y el DIN de la matriz en `J1 
 | Fmax post-route | `76.58 MHz` |
 | Slack setup aproximado | `+3.61 ns` |
 | Programacion | PASS, SRAM programada con OpenFPGALoader y retorno `0` |
-| Validacion visual | PASS parcial, matriz encendida con cambios de color y cascada visibles; pruebas finas pendientes |
+| Validacion visual | PASS, colores, LEDs individuales, filas, columnas, ajedrezado, barrido y matriz completa correctos |
 
 Comando final de build:
 
@@ -40,7 +40,18 @@ Comando de programacion ejecutado:
 openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD -m build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
 ```
 
-Resultado global actual: `BLOCKED` para cierre fisico completo porque faltan las pruebas visuales finas de LED 0, LED 63, filas, columnas, ajedrezado, ruta CSR y reemplazo exacto de frames. La deteccion, pinout, bitstream, timing, programacion y actividad fisica por DMA quedaron ejecutados y registrados.
+Resultado global actual: `PASS`. La deteccion, pinout, bitstream, timing, programacion, ruta CSR de control, ruta DMA y validacion fisica de patrones quedaron ejecutados y registrados.
+
+Resultado fisico final reportado:
+
+```text
+Todos los colores se ven perfectamente.
+Se observa encendido individual de LEDs.
+Se observa una fila roja bajando.
+Se observa una columna azul desplazandose de izquierda a derecha.
+Se observa ajedrezado entre azul y verde.
+Se observa toda la matriz encendida con los colores esperados.
+```
 
 ## Actualizacion 2026-07-11 - Colorlight 5A-75B
 

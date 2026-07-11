@@ -39,7 +39,7 @@ Bitstream: Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
 Fmax: 76.58 MHz
 Slack setup aprox.: +3.61 ns
 Programacion SRAM: PASS con OpenFPGALoader / FT232RL
-Validacion visual: PASS parcial; matriz encendida, colores intermitentes y efecto cascada visibles
+Validacion visual: PASS; colores, LEDs individuales, filas, columnas, ajedrezado y matriz completa correctos
 ```
 
 Programacion:
@@ -48,7 +48,7 @@ Programacion:
 openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD -m build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
 ```
 
-La imagen SRAM cargada actualmente usa un firmware de validacion lenta para distinguir apagado, LED 0, LED 63, colores solidos, barrido, filas, columnas, ajedrezado y frames consecutivos. No se modificaron temporizacion WS2812, FSM, RTL, DMA ni CSR.
+La imagen SRAM cargada actualmente usa un firmware de validacion lenta para distinguir apagado, LED 0, LED 63, colores solidos, barrido, filas, columnas, ajedrezado y frames consecutivos. La validacion fisica final reporta todos esos patrones funcionando correctamente. No se modificaron temporizacion WS2812, FSM, RTL, DMA ni CSR.
 
 ## Estado anterior 2026-07-11
 
