@@ -154,11 +154,11 @@ class BaseSoC(SoCCore):
 
 
         #MULTIPLIER
-        SoCCore.add_csr(self,"mult0")
+        self.csr.add("mult0")
         self.submodules.mult0 = mult_32.Mult32(platform)
 
         # LED MATRIX
-        SoCCore.add_csr(self,"disp0")
+        self.csr.add("disp0")
         self.submodules.disp0 = ws2812.WS2812(platform, platform.request("led_matrix",0))
 
         # SPI Flash --------------------------------------------------------------------------------

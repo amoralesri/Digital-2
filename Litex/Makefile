@@ -8,6 +8,13 @@ TOP=colorlight_i5
 EFINIX_SIM_CELLS   = sim_models_efx/efx_ff.v  sim_models_efx/efx_dpram_5k.v sim_models_efx/efx_ram_5k.v sim_models_efx/efx_lut4.v sim_models_efx/efx_add.v sim_models_efx/efx_gbufce.v 
 LATTICE_SIM_CELLS  = ./lattice_sim/cells_sim_ecp5.v  lattice_sim/sim_pll.v ./lattice_sim/cells_ff.vh lattice_sim/mult18x18d.v
 SERIAL = /dev/ttyUSB1
+PYTHON ?= python3
+WAVE ?= 1
+VCD ?= 1
+SIM_CYCLES ?= 50000
+FINISH_ON_WS_DONE ?= 0
+SIM_N_LEDS ?= 64
+WS_DONE_EDGES ?= 1
 
 COMM_OBJS=  mult/mult_32.v
 COMM_OBJS+= mult/control_mult.v
@@ -43,6 +50,7 @@ OBJS += $(COMM_OBJS)
 BUILD_DIR = build
 SOC_SCRIPT="colorlight_i5_no_bios.py"
 SOC_SCRIPT_DMA="colorlight_i5_no_bios_dma"
+SOC_DMA_TB=colorlight_i5_dma_TB
 FW_NB_DIR = NO_bios_fw
 FW_NB_DMA_DIR = NO_bios_fw_dma
 
@@ -60,16 +68,16 @@ fw_no_bios:
 	dd if=/dev/zero of=$(FW_NB_DIR)/firmware.bin bs=1 count=$(ROM_SIZE) status=none
 
 	@echo "=== [2/6] Generando regions.ld y headers CSR ==="
-	python3 $(SOC_SCRIPT) --build --no-compile-gateware --no-compile-software 2>&1 | \
+	$(PYTHON) $(SOC_SCRIPT) --build --no-compile-gateware --no-compile-software 2>&1 | \
 	    grep -E "INFO|ERROR|WARNING|rom|sram" || true
 	@grep "rom" build/colorlight_i5/software/include/generated/regions.ld
 
 	@echo "=== Compilando librerías software (picolibc…) ==="
-	python3 $(SOC_SCRIPT) --build --no-compile-gateware 2>&1 | tail -5
+	$(PYTHON) $(SOC_SCRIPT) --build --no-compile-gateware 2>&1 | tail -5
 
 	make -C ${FW_NB_DIR}/ 2>&1
 	FW_SIZE=$(ls -lah ${FW_NB_DIR}/firmware.bin | awk '{print $5}')
-	python3 colorlight_i5_no_bios.py --build  --board=i9 --revision=7.2 --load
+	$(PYTHON) colorlight_i5_no_bios.py --build  --board=i9 --revision=7.2 --load
 
 
 sim_efinix:
@@ -82,45 +90,54 @@ sim_efinix:
 sim_lattice:
 	rm -rf build *vpp *vcd $(FW_NB_DIR)/*bin
 	dd if=/dev/zero of=$(FW_NB_DIR)/firmware.bin bs=1 count=$(ROM_SIZE) status=none
-	python3 $(SOC_SCRIPT) --build --no-compile-gateware --no-compile-software 2>&1 | \
-	python3 $(SOC_SCRIPT) --build --no-compile-gateware 2>&1 | tail -5
+	$(PYTHON) $(SOC_SCRIPT) --build --no-compile-gateware --no-compile-software
+	$(PYTHON) $(SOC_SCRIPT) --build --no-compile-gateware 2>&1 | tail -5
 	$(MAKE) -C $(FW_NB_DIR)/
-	SIMULATION=1 python3 $(SOC_SCRIPT) --build --no-compile-gateware --no-compile-software 2>&1 | \
+	SIMULATION=1 $(PYTHON) $(SOC_SCRIPT) --build --no-compile-gateware --no-compile-software 2>&1 | \
 	    grep -E "INFO|ERROR|WARNING" || true
 	cp build/colorlight_i5/gateware/colorlight_i5_rom.init .
 	cp build/colorlight_i5/gateware/colorlight_i5_sram.init .
 	iverilog -I ./lattice_sim \
 	    -o $@_PS.vpp \
 	    -s $(TARGET)_TB \
+	    -P $(TARGET)_TB.enable_vcd=$(VCD) \
+	    -P $(TARGET)_TB.sim_cycles=$(SIM_CYCLES) \
+	    -P $(TARGET)_TB.finish_on_ws_done=$(FINISH_ON_WS_DONE) \
+	    -P $(TARGET)_TB.sim_n_leds=$(SIM_N_LEDS) \
+	    -P $(TARGET)_TB.finish_after_ws_done_edges=$(WS_DONE_EDGES) \
 	    $(TARGET)_TB.v \
 	    $(OBJS) \
 	    $(LATTICE_SIM_CELLS)
 	vvp $@_PS.vpp
-	gtkwave $(TARGET)_TB.vcd
+	@if [ "$(WAVE)" = "1" ]; then gtkwave $(TARGET)_TB.vcd; fi
 
 sim_lattice_dma:
 	rm -rf build *vpp *vcd $(FW_NB_DMA_DIR)/*bin
 	dd if=/dev/zero of=$(FW_NB_DMA_DIR)/firmware.bin bs=1 count=$(ROM_SIZE) status=none
-	SIMULATION=1 python3 $(SOC_SCRIPT_DMA).py --build --no-compile-gateware --no-compile-software 2>&1 | \
+	SIMULATION=1 $(PYTHON) $(SOC_SCRIPT_DMA).py --build --no-compile-gateware --no-compile-software 2>&1 | \
 	    grep -E "INFO|ERROR|WARNING|rom|sram|disp0" || true
-	SIMULATION=1 python3 $(SOC_SCRIPT_DMA).py --build --no-compile-gateware --no-compile-software
+	SIMULATION=1 $(PYTHON) $(SOC_SCRIPT_DMA).py --build --no-compile-gateware --no-compile-software
 	mkdir -p build/colorlight_i5/software/libc
 	cp $$(grep '^LIBC_DIRECTORY=' build/colorlight_i5/software/include/generated/variables.mak | cut -d= -f2)/picolibc-minimal.h build/colorlight_i5/software/libc/picolibc.h
 	printf '#define FORMAT_DEFAULT_INTEGER\n#define __IO_DEFAULT '\''i'\''\n' >> build/colorlight_i5/software/libc/picolibc.h
 	$(MAKE) -C $(FW_NB_DMA_DIR)/
-	SIMULATION=1 python3 $(SOC_SCRIPT_DMA).py --build --no-compile-gateware --no-compile-software 2>&1 | \
+	SIMULATION=1 $(PYTHON) $(SOC_SCRIPT_DMA).py --build --no-compile-gateware --no-compile-software 2>&1 | \
 	    grep -E "INFO|ERROR|WARNING" || true
 	cp build/colorlight_i5/gateware/colorlight_i5_rom.init .
 	cp build/colorlight_i5/gateware/colorlight_i5_sram.init .
 	iverilog -I ./lattice_sim \
 	    -o $@_PS.vpp \
-	    -s $(SOC_SCRIPT_DMA)_TB \
-	    -P colorlight_i5_dma_TB.enable_vcd=1 \
-	    $(SOC_SCRIPT_DMA)_TB.v \
+	    -s $(SOC_DMA_TB) \
+	    -P colorlight_i5_dma_TB.enable_vcd=$(VCD) \
+	    -P colorlight_i5_dma_TB.sim_cycles=$(SIM_CYCLES) \
+	    -P colorlight_i5_dma_TB.finish_on_ws_done=$(FINISH_ON_WS_DONE) \
+	    -P colorlight_i5_dma_TB.sim_n_leds=$(SIM_N_LEDS) \
+	    -P colorlight_i5_dma_TB.finish_after_ws_done_edges=$(WS_DONE_EDGES) \
+	    $(SOC_DMA_TB).v \
 	    $(OBJS) \
 	    $(LATTICE_SIM_CELLS)
 	vvp $@_PS.vpp
-	gtkwave colorlight_i5_dma_TB.vcd colorlight_i5_no_bios_dma_sim.gtkw
+	@if [ "$(WAVE)" = "1" ]; then gtkwave colorlight_i5_dma_TB.vcd colorlight_i5_no_bios_dma_sim.gtkw; fi
 
 
 svg:

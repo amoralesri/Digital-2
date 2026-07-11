@@ -1,5 +1,6 @@
 	BUILD_DIR=../build/colorlight_i5/
 SERIAL?=/dev/ttyUSB1
+TFTP_DIR?=/srv/tftp
 
 COMMONFLAGS += -DUART_POLLING 
 
@@ -21,7 +22,7 @@ all: firmware.bin
 	$(PYTHON) -m litex.soc.software.memusage firmware.elf $(BUILD_DIR)/software/include/generated/regions.ld $(TRIPLE)
 	$(OBJCOPY) -O binary $< $@
 	chmod -x $@
-	cp firmware.bin /srv/tftp/boot.bin
+	@if [ -d "$(TFTP_DIR)" ]; then cp firmware.bin "$(TFTP_DIR)/boot.bin"; fi
 firmware.elf: $(OBJECTS)
 	$(CC) $(LDFLAGS) \
 		-T linker.ld \

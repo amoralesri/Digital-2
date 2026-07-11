@@ -44,7 +44,21 @@ sim:
 	vvp a.out
 	gtkwave $(TARGET)_TB.vcd ${TARGET}_sim.gtkw
 
-.PHONY: streamer_v sim_streamer sim_streamer_view
+.PHONY: streamer_v sim_streamer sim_streamer_view sim_ws2812_timer_check sim_ws2812_smoke sim_ws2812_full
+
+sim_ws2812_timer_check:
+	rm -f ws2812_timer_check_TB.vvp
+	iverilog -DBENCH -o ws2812_timer_check_TB.vvp \
+		ws2812_timer_check_TB.v comp_ws.v count_ws.v ctrl_ws.v mux_ws.v ws2812.v
+	vvp ws2812_timer_check_TB.vvp
+
+sim_ws2812_smoke: sim_ws2812_timer_check
+
+sim_ws2812_full:
+	rm -f ws2812_64led_check_TB.vvp
+	iverilog -g2012 -DBENCH -o ws2812_64led_check_TB.vvp \
+		ws2812_64led_check_TB.v $(STREAMER_OBJS)
+	vvp ws2812_64led_check_TB.vvp
 
 streamer_v:
 	python3 generate_ws2812_streamer_verilog.py

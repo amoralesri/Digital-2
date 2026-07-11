@@ -160,8 +160,10 @@ class BaseSoC(SoCCore):
 
         self.platform.add_extension([
             ("serial", 1,
-                Subsignal("tx", Pins("Y4")),   # pin dummy, no se conecta
-                Subsignal("rx", Pins("Y6")),   # pin real del Colorlight i5
+                # Auxiliary UART for frame/control input on i5 v7.0 PMOD E pins.
+                # The previous Y4/Y6 placeholders are not valid in CABGA381.
+                Subsignal("tx", Pins("C17")),
+                Subsignal("rx", Pins("B18")),
                 IOStandard("LVCMOS33"),
             ),
         ])
@@ -185,7 +187,7 @@ class BaseSoC(SoCCore):
         self.submodules.disp0 = ws2812_streamer.WS2812(
             platform,
             platform.request("led_matrix", 0),
-            n_leds=256,
+            n_leds=64,
         )
         ws2812_dma_bus = wishbone.Interface(
             data_width = self.bus.data_width,

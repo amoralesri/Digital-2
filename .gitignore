@@ -1,0 +1,23 @@
+.venv-litex/
+
+# LiteX generated build trees and simulation products.
+Litex/build/
+Litex/*.vpp
+Litex/*_PS.vpp
+Litex/*.vcd
+Litex/*.init
+Litex/**/*.vvp
+Litex/**/*.vcd
+Litex/**/__pycache__/
+Litex/**/*.pyc
+
+# Bare-metal firmware build products.
+Litex/**/*.o
+Litex/**/*.d
+Litex/**/*.elf
+Litex/**/*.bin
+Litex/**/*.lst
+
+# Local one-off simulation outputs outside the active WS2812 scope.
+femtoRV/basic/rtl/cores/ws2812/a.out
+femtoRV/basic/rtl/cores/ws2812/*.vcd

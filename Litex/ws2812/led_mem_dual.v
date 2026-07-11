@@ -10,11 +10,22 @@ module led_mem_dual#(
    input      [23:0]               w_data
 );
     reg [23:0] MEM [0: (2**(addr_lenght) - 1)];
+    integer init_i;
+    integer init_file;
+
     initial begin
-        $readmemh("./display.hex",MEM);
+        for (init_i = 0; init_i < (2**addr_lenght); init_i = init_i + 1)
+            MEM[init_i] = 24'h000000;
+`ifndef SYNTHESIS
+        init_file = $fopen("display.hex", "r");
+        if (init_file) begin
+            $fclose(init_file);
+            $readmemh("display.hex", MEM);
+        end
+`endif
     end
 
-    always @(negedge clk) begin
+    always @(posedge clk) begin
         data_r <= MEM[address];
     end
 

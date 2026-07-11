@@ -150,7 +150,6 @@ class BaseSoC(SoCCore):
 
 
         #MULTIPLIER
-        SoCCore.add_csr(self,"mult0")
         self.submodules.mult0 = mult_32.Mult32(platform)
 
         # LED MATRIX
@@ -158,7 +157,7 @@ class BaseSoC(SoCCore):
         self.submodules.disp0 = ws2812_streamer.WS2812(
             platform,
             platform.request("led_matrix", 0),
-            n_leds=256,
+            n_leds=64,
         )
 
         ws2812_dma_bus = wishbone.Interface(

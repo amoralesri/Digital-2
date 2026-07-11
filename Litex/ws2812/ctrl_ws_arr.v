@@ -18,6 +18,7 @@ module ctrl_ws_arr (
  parameter INC        = 3'b100;
  parameter CHECK_END  = 3'b101;
  parameter END_SEND   = 3'b110;
+ parameter LOAD_WAIT  = 3'b111;
 
 reg [2:0] state;
 
@@ -28,7 +29,7 @@ always @(posedge clk ) begin
         case (state)
             START:
                 if(init_m)
-                    state = START_SEND;
+                    state = LOAD_WAIT;
                 else
                     state = START;
             START_SEND:
@@ -37,16 +38,18 @@ always @(posedge clk ) begin
                 state = WAIT_TX;
             WAIT_TX:
                 if(done_led)
-                    state = INC;
+                    state = CHECK_END;
                 else
                     state = WAIT_TX;
             INC:
-                state = CHECK_END;
+                state = LOAD_WAIT;
+            LOAD_WAIT:
+                state = START_SEND;
             CHECK_END:
                 if(z)
                     state = END_SEND;
                 else
-                    state = START_SEND;
+                    state = INC;
             END_SEND:
                 if(init_m)
                     state = START;
@@ -91,6 +94,12 @@ always @(* ) begin
             inc      <= 1;
             done     <= 0;
         end
+        LOAD_WAIT: begin
+            init_led <= 0;
+            rst      <= 0;
+            inc      <= 0;
+            done     <= 0;
+        end
         CHECK_END: begin
             init_led <= 0;
             rst      <= 0;
@@ -124,6 +133,7 @@ always @(*) begin
     INC        : state_name = "SHUFT";
     CHECK_END  : state_name = "CHECK_END";
     END_SEND   : state_name = "END_SEND";
+    LOAD_WAIT  : state_name = "LOAD_WAIT";
   endcase
 end
 `endif

@@ -2,7 +2,7 @@ module count_ws (
     input             clk,
     input             rst,
     input             inc,
-    output reg [10:0] cnt_out
+    output reg [15:0] cnt_out
 );
 
 always @(negedge clk ) begin

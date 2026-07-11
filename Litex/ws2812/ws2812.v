@@ -7,18 +7,18 @@ module ws2812 (
     output       done_t
 );
 
-parameter fcia = 25000000;
-parameter T0H = 11'd10;
-parameter T1H = 11'd20;
-parameter PER = 11'd31;
-parameter RES = 11'd1250;
+parameter FCLK_HZ = 60000000;
+parameter T0H = 16'd24;    // 0.40 us @ 60 MHz.
+parameter T1H = 16'd48;    // 0.80 us @ 60 MHz.
+parameter PER = 16'd73;    // Measured bit period is PER + 2 cycles = 1.25 us.
+parameter RES = 16'd3000;  // 50 us latch/reset @ 60 MHz.
 
 wire rst;
 wire inc;
 wire  [1:0] sel_tim;
 wire z;
-wire [10:0] count_out;
-wire [10:0] mux_out;
+wire [15:0] count_out;
+wire [15:0] mux_out;
 
 
 count_ws  count0 ( .clk(clk), .rst(rst), .inc(inc), .cnt_out(count_out) );

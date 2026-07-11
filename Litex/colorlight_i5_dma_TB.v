@@ -10,9 +10,13 @@ module colorlight_i5_dma_TB();
     parameter verbose_dma_events = 0;
     parameter verbose_heartbeat = 0;
     parameter finish_on_loader_done = 0;
+    parameter finish_on_ws_done = 0;
     parameter finish_on_expected_writes = 0;
     parameter finish_on_both_done = 0;
     parameter enable_loader_watchdog = 0;
+    parameter [7:0] sim_n_leds = 8'd64;
+    parameter integer expected_dma_writes = 64;
+    parameter integer finish_after_ws_done_edges = 1;
 
     reg  CLK;
     reg  RESET;
@@ -25,6 +29,8 @@ module colorlight_i5_dma_TB();
         .serial_tx(TXD),
         .serial_rx(RXD)
     );
+
+    defparam uut.ws2812_periph.N_LEDS = sim_n_leds;
 
     wire [23:0] ws2812_mem0_0 = uut.ws2812_periph.mem0.MEM[0];
     wire [23:0] ws2812_mem0_1 = uut.ws2812_periph.mem0.MEM[1];
@@ -260,6 +266,12 @@ module colorlight_i5_dma_TB();
     integer pc220_stall_count;
     initial pc220_stall_count = 0;
 
+    integer ws_done_edges;
+    initial ws_done_edges = 0;
+
+    integer loader_done_edges;
+    initial loader_done_edges = 0;
+
     always @(posedge uut.sys_clk) begin
         heartbeat_count = heartbeat_count + 1;
         if (heartbeat_count[7:0] == 8'h00) begin
@@ -346,7 +358,7 @@ module colorlight_i5_dma_TB();
                 uut.disp0_sink_payload_data,
                 $time);
         end
-        if (finish_on_expected_writes && (writes == 256)) begin
+        if (finish_on_expected_writes && (writes == expected_dma_writes)) begin
             // led_mem_dual writes on negedge, so wait a few cycles before
             // printing memory and finishing.
             #(tck*4);
@@ -426,8 +438,10 @@ module colorlight_i5_dma_TB();
                 // sys_clk made vvp/VCD generation extremely slow for large
                 // transfers such as N_LEDS=256. Detailed snapshots are already
                 // produced on DMA ACK and real MEM commit events.
-                $dumpall;
-                $dumpflush;
+                if (enable_vcd) begin
+                    $dumpall;
+                    $dumpflush;
+                end
             end
         end else begin
             dump_snapshot_count = 0;
@@ -479,6 +493,7 @@ module colorlight_i5_dma_TB();
     end
 
     always @(posedge uut.disp0_done) begin
+        loader_done_edges = loader_done_edges + 1;
         $display("LOADER DONE EDGE: loader_done=%b dma_done=%b writes=%0d dma_off=%0d dma_len_words=%0d dma_adr=%08x fifo=%0d dma_sink_last=%b dma_source_last=%b loader_last=%b t=%0t",
             uut.disp0_done,
             uut.disp0_dma_done,
@@ -497,6 +512,33 @@ module colorlight_i5_dma_TB();
             // en el VCD antes del $finish.
             #(tck*4);
             $display("Loader completed: observed DMA->WS2812 writes=%0d", writes);
+            for (idx = 0; idx < 8; idx = idx + 1)
+                $display("SRAM[%0d]=%08x", idx, uut.sram[idx]);
+            for (idx = 0; idx < 8; idx = idx + 1)
+                $display("MEM[%0d]=%06x", idx, uut.ws2812_periph.mem0.MEM[idx]);
+            $finish;
+        end
+    end
+
+    always @(posedge uut.ws2812_periph.done) begin
+        ws_done_edges = ws_done_edges + 1;
+        $display("WS2812 DONE EDGE: ws_done_edges=%0d loader_done_edges=%0d loader_done=%b dma_done=%b writes=%0d ws_addr=%0d dout=%b mem0=%06x mem63=%06x t=%0t",
+            ws_done_edges,
+            loader_done_edges,
+            uut.disp0_done,
+            uut.disp0_dma_done,
+            writes,
+            uut.ws2812_periph.address,
+            uut.ws2812_periph.dout,
+            uut.ws2812_periph.mem0.MEM[0],
+            uut.ws2812_periph.mem0.MEM[63],
+            $time);
+        if (finish_on_ws_done && (ws_done_edges >= finish_after_ws_done_edges)) begin
+            #(tck*4);
+            $display("WS2812 completed: observed DMA->WS2812 writes=%0d loader_done_edges=%0d ws_done_edges=%0d",
+                writes,
+                loader_done_edges,
+                ws_done_edges);
             for (idx = 0; idx < 8; idx = idx + 1)
                 $display("SRAM[%0d]=%08x", idx, uut.sram[idx]);
             for (idx = 0; idx < 8; idx = idx + 1)
@@ -541,7 +583,13 @@ module colorlight_i5_dma_TB();
 
     initial begin
         #(tck*sim_cycles);
-        $display("Simulation stop: observed DMA->WS2812 writes=%0d", writes);
+        $display("Simulation stop: observed DMA->WS2812 writes=%0d ws_done_edges=%0d ws_done=%b loader_done=%b dma_done=%b ws_addr=%0d",
+            writes,
+            ws_done_edges,
+            uut.ws2812_periph.done,
+            uut.disp0_done,
+            uut.disp0_dma_done,
+            uut.ws2812_periph.address);
         for (idx = 0; idx < 8; idx = idx + 1)
             $display("SRAM[%0d]=%08x", idx, uut.sram[idx]);
         for (idx = 0; idx < 8; idx = idx + 1)

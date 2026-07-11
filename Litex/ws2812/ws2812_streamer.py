@@ -7,14 +7,14 @@ src_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 class WS2812StreamLoader(Module, AutoCSR):
-    def __init__(self, n_leds=256):
+    def __init__(self, n_leds=64):
         self.sink = sink = stream.Endpoint([("data", 32)])
         self.start = CSRStorage(1)
         self.done  = CSRStatus(1)
         self.busy  = CSRStatus(1)
 
         self.w_data    = Signal(24)
-        self.w_address = Signal(max=n_leds)
+        self.w_address = Signal(8)
         self.we        = Signal()
 
         addr     = Signal(max=n_leds)
@@ -90,7 +90,7 @@ class WS2812StreamLoader(Module, AutoCSR):
 
 
 class WS2812(Module, AutoCSR):
-    def __init__(self, platform, data, n_leds=256):
+    def __init__(self, platform, data, n_leds=64):
         # Existing WS2812 control/status CSR
         self.init    = CSRStorage(1)
         self.rst_cmd = CSRStorage(1)

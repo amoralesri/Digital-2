@@ -13,7 +13,7 @@ module ws2812_periph (
 );
 
 parameter SIZE   = 8;
-parameter N_LEDS = 8'h2**SIZE;
+parameter N_LEDS = 8'd64;
 
 wire init_led;
 wire rst_addr;
@@ -28,7 +28,7 @@ led_mem_dual  #(.addr_lenght( SIZE ) )  mem0  ( .clk(clk), .w_address(w_address)
 ws2812_led  ws2812_0( .clk(clk), .reset(reset), .rgb(rgb), .init(init_led), .rst_cmd(rst_cmd), .dout(dout), .done(done_led) );
 count_addr  count0  ( .clk(clk), .rst(rst_addr), .inc(inc_addr), .address(address) );
 ctrl_ws_arr ctrl0   ( .clk(clk), .reset(reset), .init_m(init_m), .done_led(done_led), .z(z), .done(done), .init_led(init_led), .rst(rst_addr), .inc(inc_addr) );
-comp_ws_arr comp0   ( .in1(address), .in2(N_LEDS), .z(z) );
+comp_ws_arr comp0   ( .in1(address), .in2(N_LEDS - 1'b1), .z(z) );
 
 
 endmodule
