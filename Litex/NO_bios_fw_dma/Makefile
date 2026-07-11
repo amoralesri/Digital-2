@@ -1,4 +1,4 @@
-	BUILD_DIR=../build/colorlight_i5/
+BUILD_DIR ?= ../build/colorlight_i5/
 SERIAL?=/dev/ttyUSB1
 TFTP_DIR?=/srv/tftp
 

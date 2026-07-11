@@ -2,6 +2,65 @@
 
 Fecha local: 2026-07-10
 
+## Actualizacion 2026-07-11 - Build Colorlight 5A-75B
+
+Se agrego un target minimo y especifico para Colorlight 5A-75B:
+
+```text
+Litex/colorlight_5a_75b_ws2812_dma.py
+```
+
+La corrida de PnR para revision asumida `7.0`, frecuencia final `60 MHz` y pin temporal `j1:0` cerro timing post-route:
+
+```bash
+cd Litex
+/home/andresrivera/digital_UN/.venv-litex/bin/python colorlight_5a_75b_ws2812_dma.py \
+  --revision=7.0 \
+  --ws2812-pin j1:0 \
+  --build \
+  --no-compile-software \
+  --nextpnr-seed 1
+```
+
+Log:
+
+```text
+docs/ws2812/log_build_5a75b_ws2812_60mhz_seed1_j1_0_rerun.txt
+```
+
+Resumen de plataforma y timing:
+
+```text
+FPGA device : LFE5U-25F-6BG256C
+System clock: 60.000MHz
+Max frequency for clock '$glbnet$crg_clkout0': 77.97 MHz (PASS at 60.00 MHz)
+Critical path total: 12.83 ns
+Slack setup aproximado: 16.67 ns - 12.83 ns = +3.84 ns
+```
+
+Recursos post-pack reportados por nextpnr:
+
+| Recurso | Usado | Disponible | Porcentaje |
+| --- | ---: | ---: | ---: |
+| `TRELLIS_IO` | 4 | 197 | 2% |
+| `DP16KD` | 48 | 56 | 85% |
+| `MULT18X18D` | 4 | 28 | 14% |
+| `EHXPLLL` | 1 | 2 | 50% |
+| `TRELLIS_FF` | 2360 | 24288 | 9% |
+| `TRELLIS_COMB` | 5061 | 24288 | 20% |
+| `TRELLIS_RAMW` | 11 | 3036 | 0% |
+
+Artefactos generados:
+
+```text
+Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
+Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.config
+Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.json
+Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.svf
+```
+
+Advertencia: el pin `j1:0` solo fue usado como pin temporal para cerrar timing. El bitstream no debe tratarse como final programable hasta confirmar revision fisica de PCB y pin DIN real de la matriz WS2812.
+
 ## Actualizacion de cierre
 
 Se regenero el build con `N_LEDS=64` y lectura del framebuffer en flanco positivo. El build preliminar para la plataforma local `colorlight_i5` con RAM integrada genera bitstream, pero la corrida fresca no cierra timing a 60 MHz.

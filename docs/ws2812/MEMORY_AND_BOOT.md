@@ -3,6 +3,37 @@
 Fecha local: 2026-07-10
 Fuente: `regions.ld`, `csr.csv`, firmware ELF y build LiteX actual.
 
+## Actualizacion 2026-07-11 - Memoria Colorlight 5A-75B
+
+La variante `colorlight_5a_75b_ws2812_dma.py` usa memoria integrada como estrategia fisica final tentativa. Esto evita forzar LiteDRAM/SDRAM y mantiene el uso de BRAM dentro del `LFE5U-25`.
+
+Regiones generadas:
+
+| Region | Base | Tamano | Uso |
+| --- | ---: | ---: | --- |
+| `rom` | `0x00000000` | 64 KiB | firmware embebido |
+| `sram` | `0x10000000` | 8 KiB | SRAM LiteX |
+| `main_ram` | `0x40000000` | 8 KiB | buffers de firmware/DMA |
+| `csr` | `0xf0000000` | 64 KiB | registros CSR |
+
+El firmware DMA se recompilo con:
+
+```bash
+cd Litex
+BUILD_DIR=../build/colorlight_5a_75b_ws2812/ \
+PYTHON=/home/andresrivera/digital_UN/.venv-litex/bin/python \
+make -C NO_bios_fw_dma
+```
+
+Uso reportado:
+
+```text
+ROM usage: 1.34 KiB (2.09%)
+SRAM usage: 0.25 KiB (3.12%)
+```
+
+El binario `NO_bios_fw_dma/firmware.bin` se embebe en la ROM cuando existe antes del build del SoC.
+
 ## Actualizacion 64 LEDs
 
 El firmware DMA actual usa 64 LEDs:

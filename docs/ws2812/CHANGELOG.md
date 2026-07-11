@@ -3,6 +3,16 @@
 Fecha local: 2026-07-10
 Rama de trabajo: `feat/ws2812-litex-final-project`
 
+## Actualizacion 2026-07-11 - avance Colorlight 5A-75B
+
+- Se confirmo JTAG con `openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD --detect`: `idcode 0x41111043`, Lattice ECP5 `LFE5U-25`.
+- Se agrego `Litex/colorlight_5a_75b_ws2812_dma.py`, target minimo para Colorlight 5A-75B basado en `litex_boards.platforms.colorlight_5a_75b`.
+- Se conservo la arquitectura WS2812/DMA de 64 LEDs y se uso ROM/RAM integrada como estrategia final tentativa.
+- Se recompilo `NO_bios_fw_dma` contra `build/colorlight_5a_75b_ws2812`.
+- Se genero bitstream 5A-75B con `--revision=7.0 --ws2812-pin j1:0 --nextpnr-seed 1`.
+- El PnR post-route cerro timing a 60 MHz: `Fmax 77.97 MHz (PASS at 60.00 MHz)`, slack setup aproximado `+3.84 ns`.
+- Se dejo programacion y validacion fisica en `BLOCKED`, porque `j1:0` es pin temporal y falta confirmar revision de PCB y pin DIN real de WS2812.
+
 ## Cierre 64 LEDs y bloqueo 5A-75B
 
 - Se ajusto `ws2812_periph.v` para `N_LEDS=64` y comparacion contra `N_LEDS - 1`, evitando iniciar una direccion 64 inexistente.

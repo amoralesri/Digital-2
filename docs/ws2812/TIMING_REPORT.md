@@ -3,6 +3,36 @@
 Fecha local: 2026-07-10
 Prueba: `make sim_ws2812_timer_check`
 
+## Actualizacion 2026-07-11 - Timing Colorlight 5A-75B
+
+El target nuevo `Litex/colorlight_5a_75b_ws2812_dma.py` cerro timing a 60 MHz en Colorlight 5A-75B revision asumida `7.0`:
+
+```text
+Max frequency for clock '$glbnet$crg_clkout0': 77.97 MHz (PASS at 60.00 MHz)
+Critical path total: 12.83 ns
+Slack setup aproximado: +3.84 ns
+```
+
+Comando ejecutado:
+
+```bash
+cd Litex
+/home/andresrivera/digital_UN/.venv-litex/bin/python colorlight_5a_75b_ws2812_dma.py \
+  --revision=7.0 \
+  --ws2812-pin j1:0 \
+  --build \
+  --no-compile-software \
+  --nextpnr-seed 1
+```
+
+Log:
+
+```text
+docs/ws2812/log_build_5a75b_ws2812_60mhz_seed1_j1_0_rerun.txt
+```
+
+La frecuencia del sistema no cambio, por lo que los parametros WS2812 simulados a 60 MHz siguen siendo los finales para esta variante: `T0H=24`, `T1H=48`, periodo de bit de 75 ciclos y reset/latch de 3000 ciclos minimo. No fue necesario repetir simulaciones por cambio de frecuencia.
+
 ## Actualizacion de cierre
 
 El protocolo WS2812 y el cierre FPGA preliminar quedaron verificados para 64 LEDs:

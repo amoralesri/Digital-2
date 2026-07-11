@@ -1,0 +1,58 @@
+$ git status --short --branch
+## feat/ws2812-litex-final-project...personal/feat/ws2812-litex-final-project
+ M NO_bios_fw_dma/Makefile
+ M board/colorlight_i5.py
+ M colorlight_i5_rom.init
+ M csr.csv
+ M firmware/helpers.c
+ M firmware/main.c
+ M ../femtoRV/basic/rtl/Makefile
+?? colorlight_5a_75b_ws2812_dma.py
+?? reporte_comparacion_pull_simulacion.md
+?? reporte_diagnostico_simulacion_calculadora.md
+?? ../docs/ws2812/log_build_5a75b_ws2812_60mhz_seed1_j1_0.txt
+?? ../docs/ws2812/log_build_5a75b_ws2812_60mhz_seed1_j1_0_rerun.txt
+?? ../docs/ws2812/log_build_5a75b_ws2812_headers_j1_0.txt
+?? ../docs/ws2812/log_fw_5a75b_ws2812_dma_j1_0.txt
+?? ../docs/ws2812/log_fw_5a75b_ws2812_dma_j1_0_final.txt
+?? ../docs/ws2812/log_fw_5a75b_ws2812_dma_j1_0_retry.txt
+?? ../docs/ws2812/log_hw_detect_5a75b_ft232rl_20260711.txt
+
+$ git remote -v
+origin	https://github.com/cicamargoba/digital_UN.git (fetch)
+origin	https://github.com/cicamargoba/digital_UN.git (push)
+personal	https://github.com/amoralesri/Digital-2.git (fetch)
+personal	https://github.com/amoralesri/Digital-2.git (push)
+
+$ lsusb
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 002: ID 1bcf:28cf Sunplus Innovation Technology Inc. Integrated_Webcam_FHD
+Bus 003 Device 003: ID 0a5c:5843 Broadcom Corp. BCM58200 ControlVault 3 (FingerPrint sensor + Contacted SmartCard)
+Bus 003 Device 004: ID 8087:0026 Intel Corp. AX201 Bluetooth
+Bus 003 Device 016: ID 0403:6001 Future Technology Devices International, Ltd FT232 Serial (UART) IC
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+
+$ openFPGALoader --scan-usb
+empty
+Bus device vid:pid       probe type      manufacturer serial               product
+003 016    0x0403:0x6001 ft232RL         FTDI         A50285BI             FT232R USB UART
+
+$ openFPGALoader --detect
+empty
+No cable or board specified: using direct ft2232 interface
+unable to open ftdi device: -3 (device not found)
+JTAG init failed with: unable to open ftdi device
+
+$ openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD --detect
+empty
+Jtag probe limited to 3MHz
+Jtag frequency : requested 6000000Hz -> real 3000000Hz
+ret 0
+index 0:
+	idcode 0x41111043
+	manufacturer lattice
+	family ECP5
+	model  LFE5U-25
+	irlength 8

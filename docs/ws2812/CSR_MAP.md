@@ -3,6 +3,58 @@
 Fecha local: 2026-07-10
 Fuente: `Litex/build/colorlight_i5/software/include/generated/csr.h` y `Litex/build/colorlight_i5/csr.csv`.
 
+## Actualizacion 2026-07-11 - CSR Colorlight 5A-75B
+
+El target `colorlight_5a_75b_ws2812_dma.py` genero un mapa CSR propio en:
+
+```text
+Litex/build/colorlight_5a_75b_ws2812/csr.csv
+Litex/build/colorlight_5a_75b_ws2812/software/include/generated/csr.h
+```
+
+Bases CSR relevantes:
+
+| Bloque | Base |
+| --- | ---: |
+| `mult0` | `0xf0000000` |
+| `disp0` | `0xf0000800` |
+| `disp0_dma` | `0xf0001000` |
+| `ctrl` | `0xf0001800` |
+| `identifier_mem` | `0xf0002000` |
+| `timer0` | `0xf0002800` |
+| `uart` | `0xf0003000` |
+
+Registros `disp0`:
+
+| Registro | Direccion | Tamano | Acceso |
+| --- | ---: | ---: | --- |
+| `disp0_init` | `0xf0000800` | 1 | RW |
+| `disp0_rst_cmd` | `0xf0000804` | 1 | RW |
+| `disp0_done` | `0xf0000808` | 1 | RO |
+| `disp0_loader_start` | `0xf000080c` | 1 | RW |
+| `disp0_loader_done` | `0xf0000810` | 1 | RO |
+| `disp0_loader_busy` | `0xf0000814` | 1 | RO |
+
+Registros `disp0_dma`:
+
+| Registro | Direccion | Tamano | Acceso |
+| --- | ---: | ---: | --- |
+| `disp0_dma_base` | `0xf0001000` | 2 | RW |
+| `disp0_dma_length` | `0xf0001008` | 1 | RW |
+| `disp0_dma_enable` | `0xf000100c` | 1 | RW |
+| `disp0_dma_done` | `0xf0001010` | 1 | RO |
+| `disp0_dma_loop` | `0xf0001014` | 1 | RW |
+| `disp0_dma_offset` | `0xf0001018` | 1 | RO |
+
+Memoria integrada generada:
+
+| Region | Base | Tamano |
+| --- | ---: | ---: |
+| `rom` | `0x00000000` | 64 KiB |
+| `sram` | `0x10000000` | 8 KiB |
+| `main_ram` | `0x40000000` | 8 KiB |
+| `csr` | `0xf0000000` | 64 KiB |
+
 ## Actualizacion de variantes
 
 Hay dos mapas CSR validos segun el target generado:

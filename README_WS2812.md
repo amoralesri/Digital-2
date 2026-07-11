@@ -2,6 +2,44 @@
 
 Este documento resume como reproducir el estado actual del periferico WS2812. La documentacion completa esta en `docs/ws2812/`.
 
+## Estado oficial 2026-07-11
+
+La placa objetivo actual es Colorlight 5A-75B. La FPGA fue detectada por JTAG usando FT232RL bit-bang:
+
+```bash
+openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD --detect
+```
+
+Resultado detectado: `idcode 0x41111043`, Lattice ECP5 `LFE5U-25`. Para la revision asumida `7.0`, la plataforma oficial de `litex_boards` selecciona `LFE5U-25F-6BG256C`, reloj `clk25` en `P6` y `sys_clk_freq=60 MHz`.
+
+Se agrego el target especifico:
+
+```text
+Litex/colorlight_5a_75b_ws2812_dma.py
+```
+
+El build con RAM integrada, ROM embebida, CSR `disp0`, DMA `disp0_dma`, LiteX stream y controlador WS2812 cierra timing a 60 MHz:
+
+```text
+Fmax post-route: 77.97 MHz (PASS at 60.00 MHz)
+Slack aproximado del camino critico setup: +3.84 ns
+Bitstream: Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
+```
+
+Comando reproducible usado para esta evidencia temporal:
+
+```bash
+cd Litex
+/home/andresrivera/digital_UN/.venv-litex/bin/python colorlight_5a_75b_ws2812_dma.py \
+  --revision=7.0 \
+  --ws2812-pin j1:0 \
+  --build \
+  --no-compile-software \
+  --nextpnr-seed 1
+```
+
+Limitacion critica: `j1:0` fue usado como pin temporal de build para cerrar timing. No se debe programar como producto final hasta confirmar el pin fisico real conectado al DIN de la matriz WS2812 y la revision exacta impresa en la PCB. Por eso la programacion y la validacion fisica siguen en `BLOCKED`, no en `PASS`.
+
 ## Estado oficial 2026-07-10
 
 El cierre actual adopta 64 LEDs como configuracion verificable del camino WS2812. Se corrigio el RTL para transmitir exactamente direcciones `0..63`, incluir `LED63` y no iniciar `LED64`. Tambien se cerro el timing del build preliminar i5 a 60 MHz despues de mover la lectura del framebuffer a flanco positivo.

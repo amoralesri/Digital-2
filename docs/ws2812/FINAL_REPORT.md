@@ -4,6 +4,61 @@ Fecha local: 2026-07-10
 Repositorio: `/home/andresrivera/digital_UN`
 Rama: `feat/ws2812-litex-final-project`
 
+## Actualizacion 2026-07-11 - Colorlight 5A-75B
+
+Se avanzo desde el estado bloqueado anterior hasta un build especifico de Colorlight 5A-75B con timing cerrado. La validacion fisica todavia no se marca como terminada porque falta confirmar dos datos externos al repositorio: revision impresa de la PCB y pin fisico real conectado a DIN de la matriz WS2812.
+
+| Punto | Resultado |
+| --- | --- |
+| FPGA detectada | PASS, `openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD --detect` |
+| IDCODE | `0x41111043` |
+| Familia/modelo JTAG | Lattice ECP5, `LFE5U-25` |
+| Plataforma usada | `litex_boards.platforms.colorlight_5a_75b`, revision asumida `7.0` |
+| FPGA/package de plataforma | `LFE5U-25F-6BG256C` |
+| Frecuencia final | 60 MHz |
+| Timing post-route | `77.97 MHz (PASS at 60.00 MHz)` |
+| Slack setup aprox. | `+3.84 ns` sobre periodo de 16.67 ns |
+| Memoria final | ROM integrada 64 KiB, SRAM 8 KiB, main RAM 8 KiB |
+| CSR principales | `disp0=0xf0000800`, `disp0_dma=0xf0001000` |
+| Bitstream generado | `Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit` |
+| Pin WS2812 | `j1:0` usado solo como pin temporal de build; pin fisico final pendiente |
+| Programacion FPGA | BLOCKED, no ejecutada con bitstream final por falta de pin/revision fisica confirmados |
+| Validacion matriz | BLOCKED, no ejecutada |
+
+Comandos principales ejecutados:
+
+```bash
+openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD --detect
+```
+
+```bash
+cd Litex
+BUILD_DIR=../build/colorlight_5a_75b_ws2812/ \
+PYTHON=/home/andresrivera/digital_UN/.venv-litex/bin/python \
+make -C NO_bios_fw_dma
+```
+
+```bash
+cd Litex
+/home/andresrivera/digital_UN/.venv-litex/bin/python colorlight_5a_75b_ws2812_dma.py \
+  --revision=7.0 \
+  --ws2812-pin j1:0 \
+  --build \
+  --no-compile-software \
+  --nextpnr-seed 1
+```
+
+Archivos nuevos relevantes:
+
+```text
+Litex/colorlight_5a_75b_ws2812_dma.py
+docs/ws2812/log_hw_detect_5a75b_ft232rl_20260711.txt
+docs/ws2812/log_build_5a75b_ws2812_60mhz_seed1_j1_0_rerun.txt
+docs/ws2812/log_fw_5a75b_ws2812_dma_j1_0_final.txt
+```
+
+Estado global: `BLOCKED` para cierre definitivo fisico. La parte de deteccion, firmware, build, recursos y timing de la variante 5A-75B queda verificada; la programacion y patrones fisicos siguen pendientes.
+
 ## Actualizacion de cierre oficial
 
 Se completo una segunda ronda de cierre sobre 64 LEDs. El periferico ahora transmite exactamente 64 LEDs por frame (`0..63`), evita el inicio espurio de `LED64`, conserva orden GRB MSB-first y soporta frames consecutivos. El firmware DMA carga 64 palabras de 32 bits por frame, equivalentes a 256 bytes.

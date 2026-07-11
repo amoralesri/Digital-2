@@ -3,6 +3,50 @@
 Fecha local: 2026-07-10
 Estado: BLOCKED. No se programo FPGA.
 
+## Actualizacion 2026-07-11 - deteccion JTAG confirmada
+
+La FPGA ya fue detectada con el cable FT232RL usado como JTAG por bit-bang:
+
+```bash
+openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD --detect
+```
+
+Salida relevante:
+
+```text
+Jtag probe limited to 3MHz
+Jtag frequency : requested 6000000Hz -> real 3000000Hz
+ret 0
+index 0:
+    idcode 0x41111043
+    manufacturer lattice
+    family ECP5
+    model  LFE5U-25
+    irlength 8
+```
+
+El adaptador aparece como:
+
+```text
+003 016 0x0403:0x6001 ft232RL FTDI A50285BI FT232R USB UART
+```
+
+El comando `openFPGALoader --detect` sin `-c ft232RL --pins=TXD:CTS:DTR:RXD` sigue fallando porque intenta una interfaz FT2232 por defecto. Para esta conexion el comando correcto es el de FT232RL con pines explicitos.
+
+Estado fisico actual:
+
+| Punto | Estado |
+| --- | --- |
+| FT232RL visible por USB | PASS |
+| Cadena JTAG ECP5 detectada | PASS |
+| Revision exacta PCB 5A-75B | PENDIENTE |
+| Pin fisico DIN WS2812 | PENDIENTE |
+| Bitstream 5A-75B con timing cerrado | PASS build |
+| Programacion de FPGA | BLOCKED |
+| Pruebas LED fisicas | BLOCKED |
+
+No se ejecuto programacion porque el bitstream construido usa `j1:0` como pin temporal de DOUT. Antes de programar hay que confirmar el pin real conectado a DIN de la matriz y la revision impresa de la PCB.
+
 ## Actualizacion de deteccion actual
 
 La inspeccion mas reciente no encontro ningun FTDI/JTAG conectado:

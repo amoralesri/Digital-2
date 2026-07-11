@@ -2,6 +2,38 @@
 
 Fecha local: 2026-07-10
 
+## Actualizacion 2026-07-11 - Variante Colorlight 5A-75B
+
+El camino DMA/Stream fue llevado al target fisico `colorlight_5a_75b_ws2812_dma.py` sin cambiar la frecuencia ni el protocolo WS2812. La integracion contiene:
+
+```text
+VexRiscv CPU
+ROM/SRAM/main_ram integradas
+WishboneDMAReader
+LiteX stream 32-bit
+WS2812StreamLoader
+ws2812_periph
+salida ws2812.dout
+```
+
+El firmware `NO_bios_fw_dma/firmware.bin` se recompilo contra los headers generados en `build/colorlight_5a_75b_ws2812`:
+
+```bash
+cd Litex
+BUILD_DIR=../build/colorlight_5a_75b_ws2812/ \
+PYTHON=/home/andresrivera/digital_UN/.venv-litex/bin/python \
+make -C NO_bios_fw_dma
+```
+
+Resultado de memoria de firmware:
+
+```text
+ROM usage: 1.34 KiB / 64 KiB
+SRAM usage: 0.25 KiB / 8 KiB
+```
+
+La validacion funcional CSR/DMA sigue apoyada en las simulaciones ya ejecutadas de 64 LEDs y dos frames. No se repitieron porque no se modifico el RTL WS2812, el loader, el DMA ni la frecuencia de 60 MHz durante el port a 5A-75B.
+
 ## Resumen
 
 El camino DMA validado usa `Litex/colorlight_i5_no_bios_dma.py`, `Litex/NO_bios_fw_dma/main.c` y `Litex/ws2812/ws2812_streamer.py`.

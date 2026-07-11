@@ -3,6 +3,35 @@
 Fecha local: 2026-07-10
 Base inspeccionada: `Litex/ws2812/`, `Litex/colorlight_i5*.py`, `Litex/Makefile`
 
+## Actualizacion 2026-07-11 - Arquitectura Colorlight 5A-75B
+
+Se agrego una variante fisica especifica para Colorlight 5A-75B:
+
+```text
+Litex/colorlight_5a_75b_ws2812_dma.py
+```
+
+Esta variante preserva el periferico WS2812 validado y cambia solamente la plataforma/constraints hacia `litex_boards.platforms.colorlight_5a_75b`. La arquitectura de producto es:
+
+```mermaid
+flowchart LR
+    CPU[VexRiscv CPU] --> WB[Wishbone interconnect]
+    WB --> ROM[ROM integrada 64 KiB]
+    WB --> SRAM[SRAM integrada 8 KiB]
+    WB --> MAIN[main_ram integrada 8 KiB]
+    WB --> CSR[CSR bus]
+    CSR --> MULT[mult0]
+    CSR --> DISP[disp0 WS2812]
+    CSR --> DMA[disp0_dma WishboneDMAReader]
+    DMA --> STREAM[LiteX Stream 32-bit]
+    STREAM --> LOADER[WS2812StreamLoader]
+    LOADER --> FB[Framebuffer WS2812 64 LEDs]
+    DISP --> PERIPH[ws2812_periph]
+    PERIPH --> DOUT[ws2812.dout pin fisico pendiente]
+```
+
+El pin `j1:0` usado en el build 2026-07-11 es temporal para PnR. El diagrama final no debe fijar un pin de salida hasta confirmar el cableado DIN real de la matriz WS2812.
+
 ## Actualizacion de cierre
 
 La arquitectura cerrada en esta ronda es de 64 LEDs. `ws2812_periph.v` usa `N_LEDS=64`, `ctrl_ws_arr.v` espera la lectura del framebuffer antes de iniciar cada LED y `led_mem_dual.v` entrega el puerto de lectura en flanco positivo. Con esto se evitan accesos a direccion 64. El build local i5 genera bitstream, pero la corrida fresca queda en `57.02 MHz (FAIL at 60.00 MHz)`, asi que el cierre temporal sigue pendiente.

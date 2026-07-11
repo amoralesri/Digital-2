@@ -4,6 +4,24 @@ Fecha local: 2026-07-10
 
 Solo se marca PASS cuando el comando fue ejecutado realmente.
 
+## Actualizacion 2026-07-11 - Colorlight 5A-75B
+
+| ID | Nivel | Comando | Resultado real | Estado |
+| --- | --- | --- | --- | --- |
+| T16 | Deteccion FT232RL/JTAG | `openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD --detect` | `idcode 0x41111043`, Lattice ECP5 `LFE5U-25` | PASS |
+| T17 | Firmware DMA para headers 5A-75B | `BUILD_DIR=../build/colorlight_5a_75b_ws2812/ PYTHON=... make -C NO_bios_fw_dma` | `firmware.bin` generado, ROM 1.34 KiB, SRAM 0.25 KiB | PASS |
+| T18 | Build 5A-75B 60 MHz | `python colorlight_5a_75b_ws2812_dma.py --revision=7.0 --ws2812-pin j1:0 --build --no-compile-software --nextpnr-seed 1` | `77.97 MHz (PASS at 60.00 MHz)`, bitstream generado | PASS |
+| T19 | Programacion FPGA | No ejecutado | Pendiente pin fisico DIN y revision exacta PCB | BLOCKED |
+| T20 | Patrones fisicos matriz | No ejecutado | Pendiente programacion segura | BLOCKED |
+
+Logs:
+
+```text
+docs/ws2812/log_hw_detect_5a75b_ft232rl_20260711.txt
+docs/ws2812/log_fw_5a75b_ws2812_dma_j1_0_final.txt
+docs/ws2812/log_build_5a75b_ws2812_60mhz_seed1_j1_0_rerun.txt
+```
+
 ## Actualizacion de cierre 64 LEDs
 
 | ID | Nivel | Comando | Resultado real | Estado |
