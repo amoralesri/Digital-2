@@ -57,6 +57,7 @@ class _CRG(LiteXModule):
 class BaseSoC(SoCCore):
     def __init__(self, revision="7.0", toolchain="trellis", sys_clk_freq=60e6,
         ws2812_pin=None,
+        device_override=None,
         use_internal_osc=False,
         sdram_rate="1:1",
         **kwargs):
@@ -65,6 +66,8 @@ class BaseSoC(SoCCore):
             raise ValueError("ws2812_pin is required. Pass a package pin like F3 or a connector pin like j1:0.")
 
         platform = colorlight_5a_75b.Platform(revision=revision, toolchain=toolchain)
+        if device_override is not None:
+            platform.device = device_override
         platform.add_extension([
             ("ws2812", 0,
                 Subsignal("dout", Pins(ws2812_pin)),
@@ -143,6 +146,8 @@ def main():
         help="System clock frequency.")
     parser.add_target_argument("--ws2812-pin", required=True,
         help="WS2812 DIN FPGA pin, for example F3 or connector notation j1:0.")
+    parser.add_target_argument("--device-override", default=None,
+        help="Override FPGA device string while keeping the selected board revision pinout.")
     parser.add_target_argument("--use-internal-osc", action="store_true",
         help="Use internal oscillator instead of clk25.")
     parser.add_target_argument("--sdram-rate", default="1:1",
@@ -154,6 +159,7 @@ def main():
         sys_clk_freq=args.sys_clk_freq,
         toolchain=args.toolchain,
         ws2812_pin=args.ws2812_pin,
+        device_override=args.device_override,
         use_internal_osc=args.use_internal_osc,
         sdram_rate=args.sdram_rate,
         **parser.soc_argdict

@@ -4,6 +4,44 @@ Fecha local: 2026-07-10
 Repositorio: `/home/andresrivera/digital_UN`
 Rama: `feat/ws2812-litex-final-project`
 
+## Actualizacion 2026-07-11 - cierre fisico V8.2 parcial
+
+Se confirmo la placa como `Colorlight 5A-75B V8.2` y el DIN de la matriz en `J1 pin fisico 1`.
+
+| Punto | Resultado |
+| --- | --- |
+| Correspondencia J1.1 | `J1 pin fisico 1 -> j1:0 -> FPGA C4` |
+| Constraint | `LOCATE COMP "ws28120_dout" SITE "C4";` |
+| FPGA solicitado para build | `LFE5U-25F-6BG256C` |
+| Revision LiteX usada | `8.2` con override explicito de device |
+| Bitstream regenerado | `Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit` |
+| Frecuencia | 60 MHz |
+| Fmax post-route | `76.58 MHz` |
+| Slack setup aproximado | `+3.61 ns` |
+| Programacion | PASS, SRAM programada con OpenFPGALoader y retorno `0` |
+| Validacion visual | PASS parcial, matriz encendida con cambios de color y cascada visibles; pruebas finas pendientes |
+
+Comando final de build:
+
+```bash
+cd Litex
+/home/andresrivera/digital_UN/.venv-litex/bin/python colorlight_5a_75b_ws2812_dma.py \
+  --revision=8.2 \
+  --device-override=LFE5U-25F-6BG256C \
+  --ws2812-pin j1:0 \
+  --build \
+  --no-compile-software \
+  --nextpnr-seed 1
+```
+
+Comando de programacion ejecutado:
+
+```bash
+openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD -m build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
+```
+
+Resultado global actual: `BLOCKED` para cierre fisico completo porque faltan las pruebas visuales finas de LED 0, LED 63, filas, columnas, ajedrezado, ruta CSR y reemplazo exacto de frames. La deteccion, pinout, bitstream, timing, programacion y actividad fisica por DMA quedaron ejecutados y registrados.
+
 ## Actualizacion 2026-07-11 - Colorlight 5A-75B
 
 Se avanzo desde el estado bloqueado anterior hasta un build especifico de Colorlight 5A-75B con timing cerrado. La validacion fisica todavia no se marca como terminada porque falta confirmar dos datos externos al repositorio: revision impresa de la PCB y pin fisico real conectado a DIN de la matriz WS2812.

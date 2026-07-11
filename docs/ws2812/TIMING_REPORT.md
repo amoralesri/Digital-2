@@ -3,6 +3,25 @@
 Fecha local: 2026-07-10
 Prueba: `make sim_ws2812_timer_check`
 
+## Actualizacion 2026-07-11 - Timing V8.2 definitivo
+
+El build final para `Colorlight 5A-75B V8.2`, `LFE5U-25F-6BG256C`, `J1 pin fisico 1 -> C4`, cerro timing a 60 MHz:
+
+```text
+Max frequency for clock '$glbnet$crg_clkout0': 76.58 MHz (PASS at 60.00 MHz)
+Critical path total: 13.06 ns
+Slack setup aproximado: 16.67 ns - 13.06 ns = +3.61 ns
+```
+
+La frecuencia no cambio, por tanto se conservan los parametros de temporizacion WS2812 ya validados:
+
+```text
+T0H = 24 ciclos
+T1H = 48 ciclos
+Periodo bit = 75 ciclos
+Reset/latch minimo = 3000 ciclos
+```
+
 ## Actualizacion 2026-07-11 - Timing Colorlight 5A-75B
 
 El target nuevo `Litex/colorlight_5a_75b_ws2812_dma.py` cerro timing a 60 MHz en Colorlight 5A-75B revision asumida `7.0`:

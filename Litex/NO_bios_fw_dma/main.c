@@ -6,6 +6,8 @@
 #define WS2812_SHOW_TIMEOUT 1000000u
 #define WS2812_DMA_TIMEOUT  1000000u
 #define WS2812_BRIGHTNESS   0x10u
+#define WS2812_STEP_DELAY   12000000u
+#define WS2812_SWEEP_DELAY   1200000u
 
 static volatile uint32_t ws2812_buffer[WS2812_HW_LEDS] __attribute__((aligned(4)));
 
@@ -160,6 +162,13 @@ static void pattern_solid_rgb(uint8_t r, uint8_t g, uint8_t b)
     (void)ws2812_show(WS2812_SHOW_TIMEOUT);
 }
 
+static void pattern_single_pixel(uint32_t index, uint8_t r, uint8_t g, uint8_t b)
+{
+    ws2812_clear();
+    ws2812_set_pixel(index, r, g, b);
+    (void)ws2812_show(WS2812_SHOW_TIMEOUT);
+}
+
 static void pattern_single_sweep(void)
 {
     uint32_t i;
@@ -168,7 +177,7 @@ static void pattern_single_sweep(void)
         ws2812_clear();
         ws2812_set_pixel(i, WS2812_BRIGHTNESS, 0, 0);
         (void)ws2812_show(WS2812_SHOW_TIMEOUT);
-        ws2812_delay(2000);
+        ws2812_delay(WS2812_SWEEP_DELAY);
     }
 }
 
@@ -183,7 +192,7 @@ static void pattern_rows(void)
             ws2812_set_pixel(row * 8u + col, 0, WS2812_BRIGHTNESS, 0);
         }
         (void)ws2812_show(WS2812_SHOW_TIMEOUT);
-        ws2812_delay(4000);
+        ws2812_delay(WS2812_STEP_DELAY);
     }
 }
 
@@ -198,7 +207,7 @@ static void pattern_columns(void)
             ws2812_set_pixel(row * 8u + col, 0, 0, WS2812_BRIGHTNESS);
         }
         (void)ws2812_show(WS2812_SHOW_TIMEOUT);
-        ws2812_delay(4000);
+        ws2812_delay(WS2812_STEP_DELAY);
     }
 }
 
@@ -236,30 +245,36 @@ int main(void)
     while (1) {
         ws2812_clear();
         (void)ws2812_show(WS2812_SHOW_TIMEOUT);
-        ws2812_delay(10000);
+        ws2812_delay(WS2812_STEP_DELAY);
+
+        pattern_single_pixel(0, WS2812_BRIGHTNESS, 0, 0);
+        ws2812_delay(WS2812_STEP_DELAY);
+
+        pattern_single_pixel(WS2812_HW_LEDS - 1u, 0, WS2812_BRIGHTNESS, 0);
+        ws2812_delay(WS2812_STEP_DELAY);
 
         pattern_solid_rgb(WS2812_BRIGHTNESS, 0, 0);
-        ws2812_delay(10000);
+        ws2812_delay(WS2812_STEP_DELAY);
 
         pattern_solid_rgb(0, WS2812_BRIGHTNESS, 0);
-        ws2812_delay(10000);
+        ws2812_delay(WS2812_STEP_DELAY);
 
         pattern_solid_rgb(0, 0, WS2812_BRIGHTNESS);
-        ws2812_delay(10000);
+        ws2812_delay(WS2812_STEP_DELAY);
 
         pattern_solid_rgb(WS2812_BRIGHTNESS / 2u,
                           WS2812_BRIGHTNESS / 2u,
                           WS2812_BRIGHTNESS / 2u);
-        ws2812_delay(10000);
+        ws2812_delay(WS2812_STEP_DELAY);
 
         pattern_single_sweep();
         pattern_rows();
         pattern_columns();
         pattern_checkerboard();
-        ws2812_delay(10000);
+        ws2812_delay(WS2812_STEP_DELAY);
 
         pattern_gradient(frame++);
-        ws2812_delay(10000);
+        ws2812_delay(WS2812_STEP_DELAY);
     }
 
     return 0;

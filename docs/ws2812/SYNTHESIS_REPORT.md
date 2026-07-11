@@ -2,6 +2,59 @@
 
 Fecha local: 2026-07-10
 
+## Actualizacion 2026-07-11 - Build definitivo V8.2
+
+Build regenerado para validacion fisica lenta:
+
+```text
+Colorlight 5A-75B V8.2
+FPGA: LFE5U-25F-6BG256C
+DIN: J1 pin fisico 1 -> j1:0 -> C4
+```
+
+Comando:
+
+```bash
+cd Litex
+/home/andresrivera/digital_UN/.venv-litex/bin/python colorlight_5a_75b_ws2812_dma.py \
+  --revision=8.2 \
+  --device-override=LFE5U-25F-6BG256C \
+  --ws2812-pin j1:0 \
+  --build \
+  --no-compile-software \
+  --nextpnr-seed 1
+```
+
+Resultados:
+
+```text
+FPGA device : LFE5U-25F-6BG256C
+System clock: 60.000MHz
+LOCATE COMP "ws28120_dout" SITE "C4";
+Max frequency: 76.58 MHz (PASS at 60.00 MHz)
+Critical path total: 13.06 ns
+Slack setup aproximado: +3.61 ns
+```
+
+Recursos:
+
+| Recurso | Usado | Disponible | Porcentaje |
+| --- | ---: | ---: | ---: |
+| `TRELLIS_IO` | 4 | 197 | 2% |
+| `DP16KD` | 48 | 56 | 85% |
+| `MULT18X18D` | 4 | 28 | 14% |
+| `EHXPLLL` | 1 | 2 | 50% |
+| `TRELLIS_FF` | 2360 | 24288 | 9% |
+| `TRELLIS_COMB` | 5059 | 24288 | 20% |
+
+Artefacto final:
+
+```text
+Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
+```
+
+La variante programada conserva la arquitectura hardware y solo alarga pausas de patrones en `NO_bios_fw_dma/main.c` para validacion fisica visual.
+
 ## Actualizacion 2026-07-11 - Build Colorlight 5A-75B
 
 Se agrego un target minimo y especifico para Colorlight 5A-75B:

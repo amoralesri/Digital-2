@@ -1,7 +1,101 @@
 # Validacion fisica WS2812
 
 Fecha local: 2026-07-10
-Estado: BLOCKED. No se programo FPGA.
+Estado: BLOCKED parcial. FPGA programada y matriz activa; faltan pruebas visuales finas.
+
+## Actualizacion 2026-07-11 - Colorlight 5A-75B V8.2 programada
+
+La placa objetivo queda fijada como:
+
+```text
+Colorlight 5A-75B V8.2
+FPGA: LFE5U-25F-6BG256C
+DIN matriz WS2812: J1 pin fisico 1
+```
+
+Correspondencia confirmada desde `litex_boards.platforms.colorlight_5a_75b`:
+
+| Nivel | Valor |
+| --- | --- |
+| Revision LiteX | `8.2` |
+| Tabla de conectores usada | `_connectors_v8_0` |
+| Entrada de J1 | `"C4 D4 E4 - D3 F5 E3 N4 N5 N3 P3 P4 M3 N1 M4 -"` |
+| Pin fisico J1.1 | primer elemento de la lista |
+| Indice LiteX | `j1:0` |
+| Pin FPGA real | `C4` |
+| Constraint generado | `LOCATE COMP "ws28120_dout" SITE "C4";` |
+
+Deteccion antes de programar:
+
+```bash
+openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD --detect
+```
+
+Resultado:
+
+```text
+Jtag probe limited to 3MHz
+Jtag frequency : requested 6000000Hz -> real 3000000Hz
+ret 0
+idcode 0x41111043
+manufacturer lattice
+family ECP5
+model LFE5U-25
+```
+
+Programacion SRAM ejecutada:
+
+```bash
+openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD -m build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
+```
+
+Resultado:
+
+```text
+Open file: DONE
+Parse file: DONE
+Enable configuration: DONE
+SRAM erase: DONE
+Loading: 100.00%
+Done
+Disable configuration: DONE
+```
+
+Codigo de retorno: `0`.
+
+Bitstream cargado:
+
+```text
+Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
+```
+
+Este bitstream fue regenerado con firmware de validacion lenta para hacer observables los pasos fisicos. El cierre temporal de esta imagen reporto:
+
+```text
+Max frequency for clock '$glbnet$crg_clkout0': 76.58 MHz (PASS at 60.00 MHz)
+Critical path total: 13.06 ns
+Slack setup aproximado: +3.61 ns
+```
+
+Estado de validacion visual:
+
+| Prueba | Estado | Observacion |
+| --- | --- | --- |
+| a. Todos los LEDs apagados | BLOCKED | Pendiente confirmacion visual del usuario |
+| b. LED 0 con brillo bajo | BLOCKED | Pendiente confirmacion visual del usuario |
+| c. LED 63 con brillo bajo | BLOCKED | Pendiente confirmacion visual del usuario |
+| d. Rojo | PASS parcial | Usuario reporta cambios de color visibles; falta confirmar orden exacto |
+| e. Verde | PASS parcial | Usuario reporta cambios de color visibles; falta confirmar orden exacto |
+| f. Azul | PASS parcial | Usuario reporta cambios de color visibles; falta confirmar orden exacto |
+| g. Filas | BLOCKED | Pendiente confirmacion visual del usuario |
+| h. Columnas | BLOCKED | Pendiente confirmacion visual del usuario |
+| i. Ajedrezado | BLOCKED | Pendiente confirmacion visual del usuario |
+| j. Barrido | PASS parcial | Usuario reporta efecto en cascada visible |
+| k. Dos frames consecutivos | PASS parcial | Usuario reporta cambios intermitentes de color; falta confirmar reemplazo exacto |
+| l. Ruta CSR | BLOCKED | Pendiente confirmacion visual del usuario |
+| m. Ruta DMA | PASS parcial | Firmware usa ruta DMA y la matriz responde fisicamente |
+
+Observacion fisica reportada por el usuario: toda la matriz se enciende, cambia colores intermitentemente muy rapido y se ve un efecto en cascada. A partir de esa observacion se regenero y programo una variante con pausas largas en firmware para permitir inspeccionar los pasos individuales. El firmware limita brillo inicial con `WS2812_BRIGHTNESS=0x10`. No se modificaron temporizacion WS2812, FSM, RTL, DMA ni CSR durante esta programacion.
 
 ## Actualizacion 2026-07-11 - deteccion JTAG confirmada
 

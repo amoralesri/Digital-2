@@ -1,0 +1,21 @@
+make: Entering directory '/home/andresrivera/digital_UN/Litex/NO_bios_fw_dma'
+ CC       isr.o
+ CC       main.o
+main.c:47:13: warning: 'ws2812_set_pixel_grb' defined but not used [-Wunused-function]
+   47 | static void ws2812_set_pixel_grb(uint32_t index, uint8_t r, uint8_t g, uint8_t b)
+      |             ^~~~~~~~~~~~~~~~~~~~
+ CC       uart.o
+ CC       firmware.elf
+/usr/lib/gcc/riscv64-unknown-elf/14.2.0/../../../riscv64-unknown-elf/bin/ld: warning: firmware.elf has a LOAD segment with RWX permissions
+chmod -x firmware.elf
+/home/andresrivera/digital_UN/.venv-litex/bin/python -m litex.soc.software.memusage firmware.elf ../build/colorlight_5a_75b_ws2812//software/include/generated/regions.ld riscv64-unknown-elf
+
+ROM usage: 1.41KiB 	(2.20%)
+SRAM usage: 0.25KiB 	(3.12%)
+  .data: 0.00KiB
+  .bss: 0.25KiB
+  stack margin: 7.75KiB
+
+ OBJCOPY  firmware.bin
+chmod -x firmware.bin
+make: Leaving directory '/home/andresrivera/digital_UN/Litex/NO_bios_fw_dma'

@@ -2,7 +2,55 @@
 
 Este documento resume como reproducir el estado actual del periferico WS2812. La documentacion completa esta en `docs/ws2812/`.
 
-## Estado oficial 2026-07-11
+## Estado oficial 2026-07-11 V8.2
+
+Placa final:
+
+```text
+Colorlight 5A-75B V8.2
+FPGA: LFE5U-25F-6BG256C
+DIN matriz: J1 pin fisico 1
+```
+
+Correspondencia de pin confirmada:
+
+```text
+J1 pin fisico 1 -> LiteX j1:0 -> FPGA C4
+Constraint: LOCATE COMP "ws28120_dout" SITE "C4";
+```
+
+Build final:
+
+```bash
+cd Litex
+/home/andresrivera/digital_UN/.venv-litex/bin/python colorlight_5a_75b_ws2812_dma.py \
+  --revision=8.2 \
+  --device-override=LFE5U-25F-6BG256C \
+  --ws2812-pin j1:0 \
+  --build \
+  --no-compile-software \
+  --nextpnr-seed 1
+```
+
+Resultado:
+
+```text
+Bitstream: Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
+Fmax: 76.58 MHz
+Slack setup aprox.: +3.61 ns
+Programacion SRAM: PASS con OpenFPGALoader / FT232RL
+Validacion visual: PASS parcial; matriz encendida, colores intermitentes y efecto cascada visibles
+```
+
+Programacion:
+
+```bash
+openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD -m build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
+```
+
+La imagen SRAM cargada actualmente usa un firmware de validacion lenta para distinguir apagado, LED 0, LED 63, colores solidos, barrido, filas, columnas, ajedrezado y frames consecutivos. No se modificaron temporizacion WS2812, FSM, RTL, DMA ni CSR.
+
+## Estado anterior 2026-07-11
 
 La placa objetivo actual es Colorlight 5A-75B. La FPGA fue detectada por JTAG usando FT232RL bit-bang:
 
@@ -38,7 +86,7 @@ cd Litex
   --nextpnr-seed 1
 ```
 
-Limitacion critica: `j1:0` fue usado como pin temporal de build para cerrar timing. No se debe programar como producto final hasta confirmar el pin fisico real conectado al DIN de la matriz WS2812 y la revision exacta impresa en la PCB. Por eso la programacion y la validacion fisica siguen en `BLOCKED`, no en `PASS`.
+Nota historica: en esta etapa `j1:0` fue usado como pin temporal de build. Esa limitacion quedo reemplazada por la confirmacion V8.2 documentada arriba: `J1 pin fisico 1 -> j1:0 -> FPGA C4`.
 
 ## Estado oficial 2026-07-10
 
