@@ -2,6 +2,10 @@
 
 Este documento resume como reproducir el estado actual del periferico WS2812. La documentacion completa esta en `docs/ws2812/`.
 
+## Proyecto base
+
+Desde mi rol de estudiante, este repositorio queda como el proyecto base funcional para controlar una matriz WS2812 con LiteX en la Colorlight 5A-75B V8.2. La secuencia LED ya programada muestra apagado, LEDs individuales, colores solidos, barrido, filas, columnas, ajedrezado y gradiente usando firmware en C, transferencia DMA y un controlador WS2812 en Verilog.
+
 ## Estado oficial 2026-07-11 V8.2
 
 Placa final:
