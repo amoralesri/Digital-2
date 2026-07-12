@@ -89,4 +89,43 @@ Slack minimo observado en histograma: >= 2.543 ns
 Estado: PASS
 ```
 
-La prueba fisica con UART queda pendiente de programar y observar la matriz.
+## Validacion fisica 2026-07-12
+
+FPGA detectada por JTAG:
+
+```text
+IDCODE: 0x41111043
+Lattice ECP5 LFE5U-25
+Codigo de retorno: 0
+```
+
+Programacion SRAM:
+
+```text
+Comando:
+openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
+
+Resultado:
+Open file: DONE
+Parse file: DONE
+Enable configuration: DONE
+SRAM erase: DONE
+Loading: 100.00%
+Done
+Disable configuration: DONE
+Codigo de retorno: 0
+```
+
+UART:
+
+```text
+Puerto host identificado: /dev/ttyUSB0
+Adaptador: FT232RL A50285BI
+Baud probado: 115200
+PING: TimeoutError, sin respuesta
+GET_INFO: TimeoutError, sin respuesta
+```
+
+Conclusion: la programacion JTAG funciona, pero la validacion WS2812 Studio
+queda bloqueada porque el FT232RL conectado al header JTAG no esta cableado a
+los pines UART del SoC (`serial_tx=T6`, `serial_rx=R7`).

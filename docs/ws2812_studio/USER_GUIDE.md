@@ -37,3 +37,33 @@ tools/ws2812_studio/run.sh
 ## Imagenes
 
 Usa `Importar imagen` para convertir PNG/JPG/BMP/WebP a un frame 8x8.
+
+## Conexion fisica UART
+
+El cable FT232RL usado para OpenFPGALoader esta conectado al header JTAG. Ese
+enlace sirve para detectar y programar la FPGA, pero no garantiza comunicacion
+con WS2812 Studio.
+
+En el bitstream actual para Colorlight 5A-75B V8.2, LiteX genera el UART del
+SoC en:
+
+```text
+serial_tx -> FPGA T6
+serial_rx -> FPGA R7
+baud      -> 115200
+```
+
+Para usar `Dispositivo real`, el USB-UART debe estar conectado al UART del SoC,
+con tierra comun:
+
+```text
+USB-UART RX <- FPGA serial_tx T6
+USB-UART TX -> FPGA serial_rx R7
+GND comun
+```
+
+No confundir este UART con los pines JTAG usados por:
+
+```text
+openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD
+```

@@ -6,6 +6,33 @@ Este documento resume como reproducir el estado actual del periferico WS2812. La
 
 Desde mi rol de estudiante, este repositorio queda como el proyecto base funcional para controlar una matriz WS2812 con LiteX en la Colorlight 5A-75B V8.2. La secuencia LED ya programada muestra apagado, LEDs individuales, colores solidos, barrido, filas, columnas, ajedrezado y gradiente usando firmware en C, transferencia DMA y un controlador WS2812 en Verilog.
 
+## WS2812 Studio
+
+La rama `feat/ws2812-studio` agrega una aplicacion de escritorio en
+`tools/ws2812_studio/` y un firmware interactivo en `Litex/NO_bios_fw_dma/main.c`
+para enviar frames desde el PC por UART hacia la ruta ya validada:
+
+```text
+PC -> UART -> firmware RISC-V -> SRAM -> DMA -> WS2812 -> matriz fisica
+```
+
+Validacion fisica parcial 2026-07-12:
+
+```text
+Deteccion JTAG: PASS, IDCODE 0x41111043, Lattice ECP5 LFE5U-25
+Programacion SRAM: PASS
+Bitstream: Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
+UART host observado: /dev/ttyUSB0, FT232RL A50285BI
+Baud probado: 115200
+PING/GET_INFO: BLOCKED por timeout
+```
+
+Diagnostico: el FT232RL conectado al header JTAG programa correctamente, pero
+el UART del SoC LiteX esta en `serial_tx=T6` y `serial_rx=R7`. Para validar
+WS2812 Studio en hardware real se necesita conectar un USB-UART al UART del SoC
+o exponer ese UART en pines fisicamente accesibles, sin cambiar el pin WS2812
+`C4`, la FSM, DMA ni la temporizacion.
+
 ## Estado oficial 2026-07-11 V8.2
 
 Placa final:
