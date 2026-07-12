@@ -1,0 +1,41 @@
+QWidget {
+    background: #0c0f14;
+    color: #f1f5f9;
+    font-family: "Sans Serif";
+    font-size: 11pt;
+}
+QFrame, QGroupBox {
+    background: #151a21;
+    border: 1px solid #2a3440;
+    border-radius: 8px;
+}
+QPushButton {
+    background: #1d2630;
+    border: 1px solid #344556;
+    border-radius: 6px;
+    padding: 7px 10px;
+}
+QPushButton:hover {
+    border-color: #00d9ff;
+}
+QPushButton:checked {
+    background: #083344;
+    border-color: #00d9ff;
+}
+QLineEdit, QComboBox, QSpinBox, QSlider {
+    background: #0f141b;
+    border: 1px solid #2a3440;
+    border-radius: 5px;
+    padding: 4px;
+}
+QLabel#Title {
+    color: #00d9ff;
+    font-size: 18pt;
+    font-weight: 700;
+}
+QLabel#Good {
+    color: #39ff88;
+}
+QLabel#Bad {
+    color: #ff6b6b;
+}

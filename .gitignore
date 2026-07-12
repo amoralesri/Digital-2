@@ -1,4 +1,8 @@
 .venv-litex/
+.venv-ws2812-studio/
+__pycache__/
+*.pyc
+.pytest_cache/
 
 # LiteX generated build trees and simulation products.
 Litex/build/
