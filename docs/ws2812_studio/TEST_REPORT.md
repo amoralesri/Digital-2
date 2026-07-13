@@ -12,7 +12,7 @@ cd tools/ws2812_studio
 Resultado:
 
 ```text
-14 passed in 0.14s
+22 passed in 0.07s
 ```
 
 Cobertura:
@@ -24,6 +24,8 @@ Cobertura:
 | Imagenes | `tests/test_image_converter.py` |
 | Proyecto | `tests/test_project_serialization.py` |
 | Simulador | `tests/test_simulated_integration.py` |
+| Generador C | `tests/test_codegen.py` |
+| Pipeline | `tests/test_build_program.py` |
 
 ## Smoke test UI
 
@@ -60,8 +62,8 @@ make -C NO_bios_fw_dma clean all
 Resultado:
 
 ```text
-ROM usage: 2.65KiB (4.14%)
-SRAM usage: 0.46KiB (5.76%)
+ROM usage: 1.14KiB (1.78%)
+SRAM usage: 0.25KiB (3.12%)
 firmware.bin generado
 ```
 
@@ -83,10 +85,38 @@ cd /home/andresrivera/digital_UN/Litex
 Resultado final de timing:
 
 ```text
-Fmax: 72.39 MHz
+Fmax: 75.00 MHz
 Target: 60.00 MHz
-Slack minimo observado en histograma: >= 2.543 ns
+Slack minimo observado en histograma: >= 2.195 ns
 Estado: PASS
+```
+
+## Build & Program offline
+
+Proyecto de prueba:
+
+```text
+tools/ws2812_studio/build/red.ws2812project
+1 frame rojo, 750 ms
+```
+
+Comando:
+
+```bash
+/home/andresrivera/digital_UN/.venv-ws2812-studio/bin/python \
+  tools/ws2812_studio/scripts/build_and_program.py \
+  --project tools/ws2812_studio/build/red.ws2812project \
+  --repo-root /home/andresrivera/digital_UN \
+  --no-program
+```
+
+Resultado:
+
+```text
+Generacion C: PASS
+Firmware: PASS
+SoC/bitstream: PASS
+Timing: 75.00 MHz (PASS at 60.00 MHz)
 ```
 
 ## Validacion fisica 2026-07-12
@@ -129,3 +159,24 @@ GET_INFO: TimeoutError, sin respuesta
 Conclusion: la programacion JTAG funciona, pero la validacion WS2812 Studio
 queda bloqueada porque el FT232RL conectado al header JTAG no esta cableado a
 los pines UART del SoC (`serial_tx=T6`, `serial_rx=R7`).
+
+## Programacion autonoma 2026-07-12
+
+Comando:
+
+```bash
+/home/andresrivera/digital_UN/.venv-ws2812-studio/bin/python \
+  tools/ws2812_studio/scripts/build_and_program.py \
+  --repo-root /home/andresrivera/digital_UN \
+  --program-only
+```
+
+Resultado:
+
+```text
+Deteccion FPGA: PASS
+Programacion SRAM: PASS
+Codigo de retorno: 0
+```
+
+La confirmacion visual del frame rojo queda pendiente de observacion del usuario.

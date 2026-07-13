@@ -24,21 +24,33 @@ tools/ws2812_studio/run.sh
 
 ## Uso basico
 
-1. Selecciona `Simulador` o `Dispositivo real`.
-2. En modo real selecciona puerto y baud `115200`.
-3. Conecta.
-4. Ejecuta `PING`.
-5. Ejecuta `GET_INFO`.
-6. Dibuja en la matriz 8x8.
-7. Presiona `Enviar frame`.
-8. Activa `Live Sync` para enviar cambios automaticamente.
-9. Usa el timeline para crear y reproducir frames.
+1. Dibuja en la matriz 8x8.
+2. Selecciona colores y brillo.
+3. Usa el timeline para crear frames y duraciones.
+4. Guarda el proyecto.
+5. Presiona `COMPILAR Y PROGRAMAR`.
+6. Confirma que la matriz tiene alimentacion segura y GND comun.
+7. Espera el resultado del pipeline.
+
+La FPGA reproduce la animacion de forma autonoma despues de programar SRAM.
 
 ## Imagenes
 
 Usa `Importar imagen` para convertir PNG/JPG/BMP/WebP a un frame 8x8.
 
-## Conexion fisica UART
+## Botones de build
+
+| Boton | Funcion |
+| --- | --- |
+| `Guardar` | Guarda el proyecto editable |
+| `Generar firmware` | Escribe `generated_animation.h/.c` |
+| `Compilar` | Genera firmware y bitstream sin programar |
+| `Programar FPGA` | Programa el bitstream existente en SRAM |
+| `COMPILAR Y PROGRAMAR` | Ejecuta el flujo completo |
+
+La consola de la derecha muestra etapa, progreso, salida tecnica y resultado.
+
+## Live UART opcional
 
 El cable FT232RL usado para OpenFPGALoader esta conectado al header JTAG. Ese
 enlace sirve para detectar y programar la FPGA, pero no garantiza comunicacion
@@ -67,3 +79,5 @@ No confundir este UART con los pines JTAG usados por:
 ```text
 openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD
 ```
+
+La falta de UART no impide usar Build & Program.

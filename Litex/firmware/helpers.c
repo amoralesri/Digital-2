@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 #include <libbase/console.h>
 #include <libbase/crc.h>
@@ -56,4 +57,3 @@ void dump_bytes(unsigned int *ptr, int count, unsigned long addr)
 	}
 	printf("\n");
 }
-

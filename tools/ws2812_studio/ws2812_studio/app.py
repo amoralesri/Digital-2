@@ -16,6 +16,7 @@ def main() -> int:
     if style_path.exists():
         app.setStyleSheet(style_path.read_text(encoding="utf-8"))
     window = MainWindow()
-    window.resize(1280, 820)
+    window.setMinimumSize(1024, 680)
+    window.resize(1320, 840)
     window.show()
     return app.exec()

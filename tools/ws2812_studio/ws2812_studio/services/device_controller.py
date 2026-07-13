@@ -5,6 +5,7 @@ import itertools
 
 from ws2812_studio.models.frame import Frame
 
+from .color_order import apply_brightness, rgb_to_ws2812_bytes
 from .mapping import MatrixMapping
 from .protocol import Command, Packet, decode_packet, encode_packet, parse_ack_payload, Status
 from .serial_transport import Transport
@@ -59,9 +60,9 @@ class DeviceController:
         scale = max(0, min(255, int(brightness)))
         pixels = []
         for r, g, b in frame.pixels:
-            pixels.append((r * scale // 255, g * scale // 255, b * scale // 255))
+            pixels.append(apply_brightness((r, g, b), scale))
         mapped = self.mapping.reorder_pixels(pixels)
         payload = bytearray()
         for r, g, b in mapped:
-            payload.extend((r, g, b))
+            payload.extend(rgb_to_ws2812_bytes(r, g, b))
         return self._send(Command.SET_FRAME, bytes(payload), timeout=1.5)

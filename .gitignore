@@ -3,6 +3,7 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+tools/ws2812_studio/build/
 
 # LiteX generated build trees and simulation products.
 Litex/build/
@@ -23,5 +24,6 @@ Litex/**/*.bin
 Litex/**/*.lst
 
 # Local one-off simulation outputs outside the active WS2812 scope.
+Litex/ws2812/a.out
 femtoRV/basic/rtl/cores/ws2812/a.out
 femtoRV/basic/rtl/cores/ws2812/*.vcd

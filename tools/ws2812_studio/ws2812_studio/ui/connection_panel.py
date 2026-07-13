@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QComboBox, QFrame, QLabel, QPushButton, QVBoxLayout
+from PySide6.QtWidgets import QComboBox, QFrame, QGridLayout, QLabel, QPushButton, QVBoxLayout
 
 from ws2812_studio.constants import DEFAULT_BAUDRATE, SUPPORTED_BAUDRATES
 from ws2812_studio.services.serial_transport import available_serial_ports
@@ -15,6 +15,7 @@ class ConnectionPanel(QFrame):
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
+        self.setObjectName("Panel")
         self.port = QComboBox()
         self.baud = QComboBox()
         for baud in SUPPORTED_BAUDRATES:
@@ -34,15 +35,20 @@ class ConnectionPanel(QFrame):
         info = QPushButton("GET_INFO")
         info.clicked.connect(self.infoRequested.emit)
         layout = QVBoxLayout(self)
-        layout.addWidget(QLabel("Conexion"))
+        layout.setContentsMargins(12, 12, 12, 12)
+        title = QLabel("Conexion")
+        title.setObjectName("SectionTitle")
+        layout.addWidget(title)
         layout.addWidget(self.mode)
         layout.addWidget(self.port)
         layout.addWidget(self.baud)
         layout.addWidget(refresh)
-        layout.addWidget(self.connect_btn)
-        layout.addWidget(disconnect)
-        layout.addWidget(ping)
-        layout.addWidget(info)
+        actions = QGridLayout()
+        actions.addWidget(self.connect_btn, 0, 0)
+        actions.addWidget(disconnect, 0, 1)
+        actions.addWidget(ping, 1, 0)
+        actions.addWidget(info, 1, 1)
+        layout.addLayout(actions)
         self.refresh_ports()
 
     def refresh_ports(self) -> None:

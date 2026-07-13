@@ -1,0 +1,218 @@
+INFO:ECP5PLL:Creating ECP5PLL.
+INFO:ECP5PLL:Registering Single Ended ClkIn of 25.00MHz.
+INFO:ECP5PLL:Creating ClkOut0 sys of 60.00MHz (+-10000.00ppm).
+INFO:ECP5PLL:Creating ClkOut1 sys_ps of 60.00MHz (+-10000.00ppm).
+INFO:SoC:        __   _ __      _  __
+INFO:SoC:       / /  (_) /____ | |/_/
+INFO:SoC:      / /__/ / __/ -_)>  <
+INFO:SoC:     /____/_/\__/\__/_/|_|
+INFO:SoC:  Build your hardware, easily!
+INFO:SoC:--------------------------------------------------------------------------------
+INFO:SoC:Creating SoC... (2026-07-11 15:29:00)
+INFO:SoC:--------------------------------------------------------------------------------
+INFO:SoC:FPGA device : LFE5U-25F-6BG256C.
+INFO:SoC:System clock: 60.000MHz.
+INFO:SoCBusHandler:Creating Bus Handler...
+INFO:SoCBusHandler:32-bit wishbone Bus, 4.0GiB Address Space.
+INFO:SoCBusHandler:Adding reserved Bus Regions...
+INFO:SoCBusHandler:Bus Handler created.
+INFO:SoCCSRHandler:Creating CSR Handler...
+INFO:SoCCSRHandler:32-bit CSR Bus, 32-bit Aligned, 16.0KiB Address Space, 2048B Paging, big Ordering (Up to 32 Locations).
+INFO:SoCCSRHandler:Adding reserved CSRs...
+INFO:SoCCSRHandler:CSR Handler created.
+INFO:SoCIRQHandler:Creating IRQ Handler...
+INFO:SoCIRQHandler:IRQ Handler (up to 32 Locations).
+INFO:SoCIRQHandler:Adding reserved IRQs...
+INFO:SoCIRQHandler:IRQ Handler created.
+INFO:SoC:--------------------------------------------------------------------------------
+INFO:SoC:Initial SoC:
+INFO:SoC:--------------------------------------------------------------------------------
+INFO:SoC:32-bit wishbone Bus, 4.0GiB Address Space.
+INFO:SoC:32-bit CSR Bus, 32-bit Aligned, 16.0KiB Address Space, 2048B Paging, big Ordering (Up to 32 Locations).
+INFO:SoC:IRQ Handler (up to 32 Locations).
+INFO:SoC:--------------------------------------------------------------------------------
+INFO:SoC:Controller ctrl added.
+INFO:SoC:CPU vexriscv added.
+INFO:SoC:CPU vexriscv adding IO Region 0 at 0x80000000 (Size: 0x80000000).
+INFO:SoCBusHandler:io0 Region added at Origin: 0x80000000, Size: 0x80000000, Mode:  RW, Cached: False, Linker: False.
+INFO:SoC:CPU vexriscv overriding sram mapping from 0x01000000 to 0x10000000.
+INFO:SoC:CPU vexriscv setting reset address to 0x00000000.
+INFO:SoC:CPU vexriscv adding Bus Master(s).
+INFO:SoCBusHandler:cpu_bus0 added as Bus Master.
+INFO:SoCBusHandler:cpu_bus1 added as Bus Master.
+INFO:SoC:CPU vexriscv adding Interrupt(s).
+INFO:SoC:CPU vexriscv adding SoC components.
+INFO:SoCBusHandler:rom Region added at Origin: 0x00000000, Size: 0x00010000, Mode:  RX, Cached:  True, Linker: False.
+INFO:SoCBusHandler:rom added as Bus Slave.
+INFO:SoC:RAM rom added Origin: 0x00000000, Size: 0x00010000, Mode:  RX, Cached:  True, Linker: False.
+INFO:SoCBusHandler:sram Region added at Origin: 0x10000000, Size: 0x00002000, Mode: RWX, Cached:  True, Linker: False.
+INFO:SoCBusHandler:sram added as Bus Slave.
+INFO:SoC:RAM sram added Origin: 0x10000000, Size: 0x00002000, Mode: RWX, Cached:  True, Linker: False.
+INFO:SoCBusHandler:main_ram Region added at Origin: 0x40000000, Size: 0x00002000, Mode: RWX, Cached:  True, Linker: False.
+INFO:SoCBusHandler:main_ram added as Bus Slave.
+INFO:SoC:RAM main_ram added Origin: 0x40000000, Size: 0x00002000, Mode: RWX, Cached:  True, Linker: False.
+INFO:SoCIRQHandler:uart IRQ allocated at Location 0.
+INFO:SoCIRQHandler:timer0 IRQ allocated at Location 1.
+INFO:SoCCSRHandler:mult0 CSR allocated at Location 0.
+INFO:SoCCSRHandler:disp0 CSR allocated at Location 1.
+INFO:SoCBusHandler:disp0_dma added as Bus Master.
+INFO:SoCCSRHandler:disp0_dma CSR allocated at Location 2.
+INFO:SoC:CSR Bridge csr added.
+INFO:SoCBusHandler:csr Region added at Origin: 0xf0000000, Size: 0x00010000, Mode:  RW, Cached: False, Linker: False.
+INFO:SoCBusHandler:csr added as Bus Slave.
+INFO:SoCCSRHandler:csr added as CSR Master.
+INFO:SoCBusHandler:Interconnect: InterconnectShared (3 <-> 4).
+INFO:SoCCSRHandler:ctrl CSR allocated at Location 3.
+INFO:SoCCSRHandler:identifier_mem CSR allocated at Location 4.
+INFO:SoCCSRHandler:timer0 CSR allocated at Location 5.
+INFO:SoCCSRHandler:uart CSR allocated at Location 6.
+INFO:SoC:--------------------------------------------------------------------------------
+INFO:SoC:Finalized SoC:
+INFO:SoC:--------------------------------------------------------------------------------
+INFO:SoC:32-bit wishbone Bus, 4.0GiB Address Space.
+IO Regions: (1)
+io0                 : Origin: 0x80000000, Size: 0x80000000, Mode:  RW, Cached: False, Linker: False
+Bus Regions: (4)
+rom                 : Origin: 0x00000000, Size: 0x00010000, Mode:  RX, Cached:  True, Linker: False
+sram                : Origin: 0x10000000, Size: 0x00002000, Mode: RWX, Cached:  True, Linker: False
+main_ram            : Origin: 0x40000000, Size: 0x00002000, Mode: RWX, Cached:  True, Linker: False
+csr                 : Origin: 0xf0000000, Size: 0x00010000, Mode:  RW, Cached: False, Linker: False
+Bus Masters: (3)
+- cpu_bus0          : rw
+- cpu_bus1          : rw
+- disp0_dma         : rw
+Bus Slaves: (4)
+- rom               : r
+- sram              : rw
+- main_ram          : rw
+- csr               : rw
+INFO:SoC:32-bit CSR Bus, 32-bit Aligned, 16.0KiB Address Space, 2048B Paging, big Ordering (Up to 32 Locations).
+CSR Locations: (7)
+- mult0          : 0
+- disp0          : 1
+- disp0_dma      : 2
+- ctrl           : 3
+- identifier_mem : 4
+- timer0         : 5
+- uart           : 6
+INFO:SoC:IRQ Handler (up to 32 Locations).
+IRQ Locations: (2)
+- uart   : 0
+- timer0 : 1
+INFO:SoC:--------------------------------------------------------------------------------
+INFO:ECP5PLL:Config:
+clki_div   : 1
+clkfb      : 2
+clko0_freq : 60.00MHz
+clko0_div  : 10
+clko0_phase: 0.00°
+clko1_freq : 60.00MHz
+clko1_div  : 10
+clko1_phase: 180.00°
+clko2_div  : 1
+vco        : 600.00MHz
+clkfb_div  : 24
+INFO:SoC:--------------------------------------------------------------------------------
+INFO:SoC:SoC Hierarchy:
+INFO:SoC:--------------------------------------------------------------------------------
+INFO:SoC:
+BaseSoC
+├── crg (_CRG)
+│    └── pll (ECP5PLL)
+│         └── [BB:EHXPLLL]
+├── bus (SoCBusHandler)
+│    └── _interconnect (InterconnectShared)
+│         ├── arbiter (Arbiter)
+│         │    └── rr (RoundRobin)
+│         ├── decoder (Decoder)
+│         └── timeout (Timeout)
+│              └── waittimer_0 (WaitTimer) [Gen]
+├── csr (SoCCSRHandler)
+├── irq (SoCIRQHandler)
+├── ctrl (SoCController)
+├── cpu (VexRiscv)
+│    └── [BB:VexRiscv]
+├── rom (SRAM)
+├── sram (SRAM)
+├── main_ram (SRAM)
+├── identifier (Identifier)
+├── uart (UART)
+│    ├── ev (EventManager)
+│    │    ├── eventsourcelevel_0 (EventSourceLevel) [Gen]
+│    │    └── eventsourcelevel_1 (EventSourceLevel) [Gen]
+│    ├── phy (RS232PHY)
+│    │    ├── tx (RS232PHYTX)
+│    │    │    ├── clk_phase_accum (RS232ClkPhaseAccum)
+│    │    │    └── fsm (FSM)
+│    │    └── rx (RS232PHYRX)
+│    │         ├── clk_phase_accum (RS232ClkPhaseAccum)
+│    │         └── fsm (FSM)
+│    ├── tx_fifo (SyncFIFO)
+│    │    └── fifo (SyncFIFOBuffered)
+│    │         └── fifo (SyncFIFO)
+│    └── rx_fifo (SyncFIFO)
+│         └── fifo (SyncFIFOBuffered)
+│              └── fifo (SyncFIFO)
+├── timer0 (Timer)
+│    └── ev (EventManager)
+│         └── eventsourceprocess_0 (EventSourceProcess) [Gen]
+├── mult0 (Mult32)
+│    └── [BB:mult_32]
+├── disp0 (WS2812)
+│    ├── loader (WS2812StreamLoader)
+│    └── [BB:ws2812_periph]
+├── disp0_dma (WishboneDMAReader)
+│    ├── fifo (SyncFIFO)
+│    │    └── fifo (SyncFIFO)
+│    └── fsm (FSM)
+├── csr_bridge (Wishbone2CSR)
+│    └── fsm (FSM)
+├── csr_bankarray (CSRBankArray)
+│    ├── csrbank_0 (CSRBank) [Gen]
+│    │    ├── csrstorage_0 (CSRStorage) [Gen]
+│    │    ├── csrstorage_1 (CSRStorage) [Gen]
+│    │    └── csrstatus_0 (CSRStatus) [Gen]
+│    ├── csrbank_1 (CSRBank) [Gen]
+│    │    ├── csrstorage_0 (CSRStorage) [Gen]
+│    │    ├── csrstorage_1 (CSRStorage) [Gen]
+│    │    ├── csrstatus_0 (CSRStatus) [Gen]
+│    │    ├── csrstorage_2 (CSRStorage) [Gen]
+│    │    ├── csrstatus_1 (CSRStatus) [Gen]
+│    │    └── csrstatus_2 (CSRStatus) [Gen]
+│    ├── csrbank_2 (CSRBank) [Gen]
+│    │    ├── csrstorage_0 (CSRStorage) [Gen]
+│    │    ├── csrstorage_1 (CSRStorage) [Gen]
+│    │    ├── csrstorage_2 (CSRStorage) [Gen]
+│    │    ├── csrstatus_0 (CSRStatus) [Gen]
+│    │    ├── csrstorage_3 (CSRStorage) [Gen]
+│    │    └── csrstatus_1 (CSRStatus) [Gen]
+│    ├── sram_0 (SRAM) [Gen]
+│    ├── csrbank_3 (CSRBank) [Gen]
+│    │    ├── csrstorage_0 (CSRStorage) [Gen]
+│    │    ├── csrstorage_1 (CSRStorage) [Gen]
+│    │    ├── csrstorage_2 (CSRStorage) [Gen]
+│    │    ├── csrstatus_0 (CSRStatus) [Gen]
+│    │    └── csrstatus_1 (CSRStatus) [Gen]
+│    ├── csrbank_4 (CSRBank) [Gen]
+│    │    ├── csrstorage_0 (CSRStorage) [Gen]
+│    │    ├── csrstorage_1 (CSRStorage) [Gen]
+│    │    ├── csrstorage_2 (CSRStorage) [Gen]
+│    │    ├── csrstorage_3 (CSRStorage) [Gen]
+│    │    ├── csrstatus_0 (CSRStatus) [Gen]
+│    │    ├── csrstatus_1 (CSRStatus) [Gen]
+│    │    ├── csrstatus_2 (CSRStatus) [Gen]
+│    │    └── csrstorage_4 (CSRStorage) [Gen]
+│    └── csrbank_5 (CSRBank) [Gen]
+│         ├── csrstatus_0 (CSRStatus) [Gen]
+│         ├── csrstatus_1 (CSRStatus) [Gen]
+│         ├── csrstatus_2 (CSRStatus) [Gen]
+│         ├── csrstatus_3 (CSRStatus) [Gen]
+│         ├── csrstorage_0 (CSRStorage) [Gen]
+│         ├── csrstatus_4 (CSRStatus) [Gen]
+│         └── csrstatus_5 (CSRStatus) [Gen]
+└── csr_interconnect (InterconnectShared)
+Legend:
+  [Gen]: Auto-generated instance name.
+  [BB:NAME]: Blackbox instance (verilog Instance).
+
+INFO:SoC:--------------------------------------------------------------------------------

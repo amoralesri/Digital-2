@@ -9,11 +9,12 @@ Desde mi rol de estudiante, este repositorio queda como el proyecto base funcion
 ## WS2812 Studio
 
 La rama `feat/ws2812-studio` agrega una aplicacion de escritorio en
-`tools/ws2812_studio/` y un firmware interactivo en `Litex/NO_bios_fw_dma/main.c`
-para enviar frames desde el PC por UART hacia la ruta ya validada:
+`tools/ws2812_studio/` y un firmware autonomo en `Litex/NO_bios_fw_dma/main.c`
+para generar animaciones desde el PC, compilar firmware/bitstream y programar
+la FPGA por JTAG:
 
 ```text
-PC -> UART -> firmware RISC-V -> SRAM -> DMA -> WS2812 -> matriz fisica
+PC -> generated_animation.c -> firmware RISC-V -> bitstream -> FT232RL/JTAG -> matriz fisica
 ```
 
 Validacion fisica parcial 2026-07-12:
@@ -24,14 +25,13 @@ Programacion SRAM: PASS
 Bitstream: Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
 UART host observado: /dev/ttyUSB0, FT232RL A50285BI
 Baud probado: 115200
-PING/GET_INFO: BLOCKED por timeout
+Build & Program rojo: PASS hasta programacion SRAM
+PING/GET_INFO UART: no requerido en modo principal
 ```
 
-Diagnostico: el FT232RL conectado al header JTAG programa correctamente, pero
-el UART del SoC LiteX esta en `serial_tx=T6` y `serial_rx=R7`. Para validar
-WS2812 Studio en hardware real se necesita conectar un USB-UART al UART del SoC
-o exponer ese UART en pines fisicamente accesibles, sin cambiar el pin WS2812
-`C4`, la FSM, DMA ni la temporizacion.
+WS2812 Studio no necesita UART en modo Build & Program. El FT232RL conectado al
+header JTAG basta para detectar y programar SRAM. El modo Live UART queda como
+opcion secundaria si se conecta un USB-UART a `serial_tx=T6` y `serial_rx=R7`.
 
 ## Estado oficial 2026-07-11 V8.2
 

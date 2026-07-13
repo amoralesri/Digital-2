@@ -1,6 +1,13 @@
 # WS2812 Studio
 
-Aplicacion de escritorio para editar y enviar frames a la matriz WS2812 8x8 del proyecto LiteX en Colorlight 5A-75B V8.2.
+Aplicacion de escritorio para editar animaciones de una matriz WS2812 8x8 y
+programarlas en la Colorlight 5A-75B V8.2 por FT232RL/JTAG.
+
+El modo principal no necesita UART:
+
+```text
+editar -> guardar proyecto -> compilar y programar -> FPGA reproduce autonomamente
+```
 
 ## Ejecucion
 
@@ -19,4 +26,23 @@ Tambien puedes usar:
 tools/ws2812_studio/run.sh
 ```
 
-La aplicacion incluye modo simulador para desarrollar sin la FPGA conectada.
+## Build & Program
+
+Desde la UI usa `COMPILAR Y PROGRAMAR`. Internamente ejecuta:
+
+```bash
+tools/ws2812_studio/scripts/build_and_program.py --project <archivo.ws2812project>
+```
+
+Genera:
+
+```text
+Litex/NO_bios_fw_dma/generated_animation.h
+Litex/NO_bios_fw_dma/generated_animation.c
+```
+
+Cada LED se guarda como `0x00GGRRBB`. El bitstream se programa en SRAM, por lo
+que se pierde al apagar la FPGA.
+
+La aplicacion conserva el modo Live UART como opcion secundaria, pero no es
+necesario para compilar ni programar.

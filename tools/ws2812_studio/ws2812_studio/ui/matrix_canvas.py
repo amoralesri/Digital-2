@@ -12,10 +12,11 @@ from ws2812_studio.services.mapping import MatrixMapping
 class MatrixCanvas(QWidget):
     frameChanged = Signal()
     hovered = Signal(int, int, int, tuple)
+    colorPicked = Signal(tuple)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setMinimumSize(360, 360)
+        self.setMinimumSize(320, 320)
         self.setMouseTracking(True)
         self.frame = Frame.blank()
         self.mapping = MatrixMapping()
@@ -35,8 +36,8 @@ class MatrixCanvas(QWidget):
         self.tool = tool
 
     def cell_rect(self, x: int, y: int) -> QRect:
-        side = min(self.width(), self.height()) - 20
-        cell = side // WIDTH
+        side = max(160, min(self.width(), self.height()) - 24)
+        cell = max(18, side // WIDTH)
         x0 = (self.width() - cell * WIDTH) // 2
         y0 = (self.height() - cell * HEIGHT) // 2
         return QRect(x0 + x * cell, y0 + y * cell, cell, cell)
@@ -86,6 +87,7 @@ class MatrixCanvas(QWidget):
         self._dragging = True
         if self.tool == "eyedropper":
             self.current_color = self.frame.get_pixel(x, y)
+            self.colorPicked.emit(self.current_color)
         elif self.tool == "fill":
             self.frame.fill(self.current_color)
             self.frameChanged.emit()

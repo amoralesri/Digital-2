@@ -1,0 +1,14 @@
+make: Entering directory '/home/andresrivera/digital_UN/Litex/NO_bios_fw_dma'
+ CC       isr.o
+ CC       main.o
+main.c:45:13: warning: 'ws2812_set_pixel_grb' defined but not used [-Wunused-function]
+   45 | static void ws2812_set_pixel_grb(uint32_t index, uint8_t r, uint8_t g, uint8_t b)
+      |             ^~~~~~~~~~~~~~~~~~~~
+ CC       uart.o
+ CC       firmware.elf
+/usr/lib/gcc/riscv64-unknown-elf/14.2.0/../../../riscv64-unknown-elf/bin/ld: warning: firmware.elf has a LOAD segment with RWX permissions
+chmod -x firmware.elf
+python3 -m litex.soc.software.memusage firmware.elf ../build/colorlight_5a_75b_ws2812//software/include/generated/regions.ld riscv64-unknown-elf
+/usr/bin/python3: Error while finding module specification for 'litex.soc.software.memusage' (ModuleNotFoundError: No module named 'litex')
+make: *** [Makefile:22: firmware.bin] Error 1
+make: Leaving directory '/home/andresrivera/digital_UN/Litex/NO_bios_fw_dma'

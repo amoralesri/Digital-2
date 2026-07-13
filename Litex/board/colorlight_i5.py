@@ -12,6 +12,7 @@ import copy
 from litex.build.generic_platform import *
 from litex.build.lattice import LatticeECP5Platform
 from litex.build.lattice.programmer import EcpDapProgrammer
+from litex.build.openfpgaloader import OpenFPGALoader
 
 # IOs ----------------------------------------------------------------------------------------------
 
@@ -209,7 +210,7 @@ class Platform(LatticeECP5Platform):
         LatticeECP5Platform.__init__(self, device, io, connectors=connectors, toolchain=toolchain)
 
     def create_programmer(self):
-        return EcpDapProgrammer()
+        return OpenFPGALoader()
 
     def do_finalize(self, fragment):
         LatticeECP5Platform.do_finalize(self, fragment)

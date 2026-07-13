@@ -1,0 +1,14 @@
+#ifndef GENERATED_ANIMATION_H
+#define GENERATED_ANIMATION_H
+
+#include <stdint.h>
+
+#define WS2812_ANIMATION_FRAME_COUNT 4u
+#define WS2812_ANIMATION_LOOP 1u
+#define WS2812_ANIMATION_LED_COUNT 64u
+#define WS2812_ANIMATION_DATA_BYTES 1024u
+
+extern const uint32_t ws2812_animation_frames[WS2812_ANIMATION_FRAME_COUNT][WS2812_ANIMATION_LED_COUNT];
+extern const uint32_t ws2812_frame_durations_ms[WS2812_ANIMATION_FRAME_COUNT];
+
+#endif

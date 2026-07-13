@@ -1,28 +1,30 @@
 # WS2812 Studio - Physical Test
 
-Estado: BLOCKED en comunicacion UART fisica.
+Estado: BLOCKED en confirmacion visual de la matriz.
 
 El proyecto base WS2812 ya estaba validado fisicamente antes de esta rama. Esta
-lista corresponde especificamente a la nueva capa WS2812 Studio: PC, UART,
-firmware interactivo y envio manual de frames.
+lista corresponde especificamente a la nueva capa WS2812 Studio en modo
+Build & Program: PC, generacion C, firmware autonomo, bitstream y JTAG.
 
 Checklist:
 
 1. Compilar firmware Studio. PASS
 2. Regenerar bitstream. PASS
 3. Programar FPGA. PASS
-4. Conectar aplicacion. BLOCKED
-5. PING. BLOCKED
-6. GET_INFO. BLOCKED
-7. CLEAR. BLOCKED
-8. Rojo, verde y azul. BLOCKED
-9. LED 0. BLOCKED
-10. LED 63. BLOCKED
-11. Patron manual. BLOCKED
-12. Imagen importada. BLOCKED
-13. Tres frames en timeline. BLOCKED
-14. Live Sync. BLOCKED
-15. Desconexion y reconexion. BLOCKED
+4. Generar firmware. PASS
+5. Compilar firmware. PASS
+6. Regenerar bitstream. PASS
+7. Detectar FPGA desde pipeline. PASS
+8. Rojo. BLOCKED, programado pero pendiente de confirmacion visual
+9. Verde. BLOCKED
+10. Azul. BLOCKED
+11. LED 0. BLOCKED
+12. LED 63. BLOCKED
+13. Patron manual. BLOCKED
+14. Imagen importada. BLOCKED
+15. Tres frames en timeline. BLOCKED
+16. Live Sync UART. N/A para modo principal
+17. Desconexion y reconexion UART. N/A para modo principal
 
 ## Datos de build
 
@@ -32,12 +34,13 @@ FPGA: LFE5U-25F-6BG256C
 DIN: J1 pin fisico 1
 Pin FPGA real: C4
 Frecuencia: 60 MHz
-Fmax: 72.39 MHz
-Slack minimo observado: >= 2.543 ns
+Fmax: 75.00 MHz
+Slack minimo observado: >= 2.195 ns
 Bitstream: Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
 UART LiteX: serial_tx=T6, serial_rx=R7
 UART host observado: /dev/ttyUSB0, FTDI A50285BI
 Baud rate probado: 115200
+Modo principal: Build & Program por JTAG, sin UART
 ```
 
 ## Deteccion y programacion
@@ -140,3 +143,25 @@ del bitstream, o exponer un UART del SoC en pines fisicamente accesibles sin
 modificar WS2812, DMA, FSM, timing ni el pin C4.
 
 No marcar PASS sin observacion fisica.
+
+## Build & Program rojo
+
+Proyecto:
+
+```text
+tools/ws2812_studio/build/red.ws2812project
+1 frame rojo, 750 ms
+```
+
+Resultado:
+
+```text
+Generacion C: PASS
+Firmware: PASS
+Bitstream: PASS
+Timing: 75.00 MHz PASS at 60.00 MHz
+Deteccion FPGA: PASS
+Programacion SRAM: PASS
+```
+
+Pendiente: confirmacion visual del usuario de que la matriz esta roja.

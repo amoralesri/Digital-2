@@ -1,0 +1,15 @@
+make: Entering directory '/home/andresrivera/digital_UN/Litex/NO_bios_fw_dma'
+ CC       isr.o
+In file included from /home/andresrivera/digital_UN/.venv-litex/lib/python3.14/site-packages/pythondata_software_picolibc/data/libc/include/machine/ieeefp.h:12,
+                 from /home/andresrivera/digital_UN/.venv-litex/lib/python3.14/site-packages/pythondata_software_picolibc/data/libc/include/sys/config.h:32,
+                 from /home/andresrivera/digital_UN/.venv-litex/lib/python3.14/site-packages/pythondata_software_picolibc/data/libc/include/sys/cdefs.h:45,
+                 from /home/andresrivera/digital_UN/.venv-litex/lib/python3.14/site-packages/pythondata_software_picolibc/data/libc/include/stdint.h:12,
+                 from /home/andresrivera/digital_UN/Litex/build/colorlight_5a_75b_ws2812/software/include/generated/soc.h:6,
+                 from /home/andresrivera/digital_UN/Litex/build/colorlight_5a_75b_ws2812/software/include/generated/csr.h:9,
+                 from isr.c:1:
+/home/andresrivera/digital_UN/.venv-litex/lib/python3.14/site-packages/pythondata_software_picolibc/data/libc/include/sys/features.h:28:10: fatal error: picolibc.h: No such file or directory
+   28 | #include <picolibc.h>
+      |          ^~~~~~~~~~~~
+compilation terminated.
+make: *** [Makefile:40: isr.o] Error 1
+make: Leaving directory '/home/andresrivera/digital_UN/Litex/NO_bios_fw_dma'

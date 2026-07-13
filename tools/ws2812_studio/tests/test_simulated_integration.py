@@ -16,7 +16,7 @@ def test_simulated_device_ping_info_and_frame():
     frame = Frame.blank((10, 20, 30))
     result = controller.send_frame(frame)
     assert result.ok
-    assert transport.last_frame[:3] == bytes([10, 20, 30])
+    assert transport.last_frame[:3] == bytes([20, 10, 30])
     assert controller.clear().status == Status.OK
     controller.close()
 

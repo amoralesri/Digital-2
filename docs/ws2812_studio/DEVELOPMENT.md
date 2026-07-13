@@ -11,10 +11,24 @@ cd /home/andresrivera/digital_UN/tools/ws2812_studio
 
 ```text
 ws2812_studio/models      modelos de frame, animacion y proyecto
-ws2812_studio/services    protocolo, transporte, mapeo, imagenes
+ws2812_studio/services    codegen, pipeline, protocolo, transporte, mapeo, imagenes
 ws2812_studio/ui          widgets PySide6
 tests                     pruebas automatizadas
+scripts                   entrada CLI del pipeline Build & Program
 ```
+
+## Generacion de animacion
+
+```bash
+cd /home/andresrivera/digital_UN
+PYTHONPATH=tools/ws2812_studio \
+.venv-ws2812-studio/bin/python tools/ws2812_studio/scripts/build_and_program.py \
+  --project tools/ws2812_studio/build/red.ws2812project \
+  --no-program
+```
+
+La UI invoca este pipeline con `QProcess`, de modo que la ventana no queda
+bloqueada durante Yosys/nextpnr.
 
 ## Firmware
 
@@ -49,3 +63,21 @@ cd /home/andresrivera/digital_UN/tools/ws2812_studio
 
 El modo simulador permite probar PING, GET_INFO y envio de frames sin conectar
 la FPGA.
+
+## Dependencias externas
+
+```text
+riscv64-unknown-elf-gcc
+yosys
+nextpnr-ecp5
+ecppack
+openFPGALoader
+LiteX en .venv-litex
+```
+
+## Programacion SRAM
+
+```bash
+openFPGALoader -c ft232RL --pins=TXD:CTS:DTR:RXD \
+  Litex/build/colorlight_5a_75b_ws2812/gateware/colorlight_5a_75b.bit
+```
